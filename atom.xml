@@ -5,7 +5,7 @@
   <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2017-08-04T11:25:27.570Z</updated>
+  <updated>2017-08-08T08:59:59.595Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -14,6 +14,25 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Introduction</title>
+    <link href="https://jqs1970291214.github.io/MyBlog/2017/08/08/Introduction/"/>
+    <id>https://jqs1970291214.github.io/MyBlog/2017/08/08/Introduction/</id>
+    <published>2017-08-08T08:55:01.713Z</published>
+    <updated>2017-08-08T08:59:59.595Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your advice!</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
