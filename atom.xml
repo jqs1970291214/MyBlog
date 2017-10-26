@@ -5,7 +5,7 @@
   <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2017-08-08T10:31:41.486Z</updated>
+  <updated>2017-08-08T08:59:59.595Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -14,70 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="https://jqs1970291214.github.io/MyBlog/2017/08/08/equals%E6%96%B9%E6%B3%95%E9%87%8D%E8%BD%BD%E3%80%81%E7%9B%B8%E7%AD%89%E6%80%A7%E6%B5%8B%E8%AF%95%E4%B8%8E%E7%BB%A7%E6%89%BF/"/>
-    <id>https://jqs1970291214.github.io/MyBlog/2017/08/08/equals方法重载、相等性测试与继承/</id>
-    <published>2017-08-08T10:31:10.615Z</published>
-    <updated>2017-08-08T10:31:41.486Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="equals�������ء������Բ������̳�"><a href="#equals�������ء������Բ������̳�" class="headerlink" title="equals�������ء������Բ������̳�"></a>equals�������ء������Բ������̳�</h1><p>һ��equals��������д</p>
-<p>Object���е�equals�������ڼ������������Ƿ����ȣ�Ĭ�ϲ���Ϊ�������������Ƿ�������ͬ�����á���Object��������һ�㸲��equals����������String�ࣩ�������ڼ�������������״̬�Ƿ����ȡ�</p>
-<p>��дequals������һ����ȡ���²��裺</p>
-<p>public boolean equals(Object other){</p>
-<p>//������������������ͬ�������򷵻�true������һ���Ż�</p>
-<blockquote>
-<p>  If (this==other) return true;</p>
-<p>  //����otherΪnull������false</p>
-<p>  If (other==null) return false;</p>
-<p>  //������������������ͬһ���࣬����false</p>
-<p>  If (getClass()!=other.getClass()) return false;</p>
-<p>  //���ڿ���ȷ��������������ͬһ���࣬��������ת��������this����Person��</p>
-<p>  Person oth=(Person)other;</p>
-<p>  //�����ж�ʵ�����Ƿ�����</p>
-<p>  return field1.equals(oth.field1)\&amp;&amp;(field2==oth.field2);</p>
-</blockquote>
-<p>}</p>
-<p>�ڸ���equals����ʱ������ʹ���������β��б��͸���һ�£��ɷ������Ͳ����б����ɵķ���ǩ���ڷ��������𵽹ؼ����ã���ζ������д���ǲ�������</p>
-<p>public boolean equals(Object oth){</p>
-<p>}</p>
-<p>public int equals(Object oth){</p>
-<p>}</p>
-<p>���ǿ���ʹ��\@Override�����Ǳ����صķ�������������û�б��ɹ����أ������������󱨸棬����һ����Ч����������С���ɡ�</p>
-<p>���ж�ʵ����ʱ����ʵ����Ϊ����ʱӦ��ʹ��Objects.equals�������Ա�����ָ���쳣������������������һ��Ӧ��Ϊ��</p>
-<p>return Objects.equals(field1,field2)\&amp;&amp;(field2==oth.field2);</p>
-<p>ʹ�ø÷�����Ҫ����java.util.Objects,��������������Ϊnull������true����������һ��Ϊnull������false����������para1.equals(para2);</p>
-<p>�÷���Դ��ʵ��ժ¼���£�</p>
-<p>public static boolean equals(Object a, Object b) {</p>
-<p>return (a == b) || (a != null &amp;&amp; a.equals(b));</p>
-<p>}</p>
-<p>�������Ȳ��Ժͼ̳�</p>
-<p>������������������һ���࣬�����ͻ����ø��ӡ��ܶ��˵���ʹ��instanceof���в��ԣ�</p>
-<p>If(!(other instanceof thisObj)) return false;</p>
-<p>������ô����û�н���other��thisObj�����Ķ��������⣬����Υ����equals�����ĶԳ��ԣ�Java���Թ淶Ҫ��equals�����ĶԳ��ԣ����ҽ���x.equals(y);����true��y.equals(x);ҲӦ�÷���true������son�͸���father��ͬ����������������������equals���������գ�һ���еķ�����faher.equals(son)�᷵��true����son.equals(father)���᷵��false������Ȼ�ǲ����ʵġ�</p>
-<p>Ϊ�˸Ľ��������⣬д����������equals���������Խ��������жϣ�</p>
-<ul>
-<li><p>�������ȵĸ����ɸ�������������ʹ��instanceof���м��⣬�����������ڼ����ɸ����������Ķ��������Ķ���֮���������ԡ�</p>
-</li>
-<li><p>�������ȵĸ���������������equals�����ĶԳ���ǿ��ʹ��getClass()���м��⡣</p>
-</li>
-</ul>
-<p>�ڶԴ��������޸�ʱ���������ȵĸ�����������������һ���д��뱣�ֲ��䡣�������ȵĸ����ɸ�����������ô��һ�������ж���other��Ϊnull���ĵ�������Ϊ��</p>
-<p>If(!(other instanceof Person)) return false;</p>
-<ul>
-<li><em>2017.7.31 18:00��һ�α༭</em></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;equals�������ء������Բ������̳�&quot;&gt;&lt;a href=&quot;#equals�������ء������Բ������̳�&quot; class=&quot;headerlink&quot; title=&quot;equals�������ء������Բ������̳�&quot;&gt;&lt;/a
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>Introduction</title>
