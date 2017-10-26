@@ -5,7 +5,7 @@
   <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2017-10-26T15:54:19.370Z</updated>
+  <updated>2017-10-26T15:59:08.691Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -20,18 +20,22 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/26/C-%E6%8C%87%E9%92%88%E8%BE%A8%E6%9E%90/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/26/C-指针辨析/</id>
     <published>2017-10-26T15:49:40.000Z</published>
-    <updated>2017-10-26T15:54:19.370Z</updated>
+    <updated>2017-10-26T15:59:08.691Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    <content type="html"><![CDATA[<a id="more"></a>
+<h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
 <h6 id="第一次修改：2016-12-31-0-04"><a href="#第一次修改：2016-12-31-0-04" class="headerlink" title="第一次修改：2016-12-31 0:04"></a>第一次修改：2016-12-31 0:04</h6><h6 id="第二次修改：2017-1-4-22-07"><a href="#第二次修改：2017-1-4-22-07" class="headerlink" title="第二次修改：2017/1/4 22:07"></a>第二次修改：2017/1/4 22:07</h6>]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;C-指针辨析&quot;&gt;&lt;a href=&quot;#C-指针辨析&quot; class=&quot;headerlink&quot; title=&quot;C++指针辨析&quot;&gt;&lt;/a&gt;C++指针辨析&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;g
+      &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h1 id=&quot;C-指针辨析&quot;&gt;&lt;a href=&quot;#C-指针辨析&quot; class=&quot;headerlink&quot; title=&quot;C++指针辨析&quot;&gt;&lt;/a&gt;C++指针辨析&lt;/h1&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;tabl
     
     </summary>
     
+    
+      <category term="C++" scheme="https://jqs1970291214.github.io/MyBlog/tags/C/"/>
     
   </entry>
   
@@ -40,7 +44,7 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/26/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91equals%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E3%80%81%E7%9B%B8%E7%AD%89%E6%80%A7%E6%B5%8B%E8%AF%95%E5%92%8C%E7%BB%A7%E6%89%BF/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/</id>
     <published>2017-10-26T15:05:44.000Z</published>
-    <updated>2017-10-26T15:06:12.095Z</updated>
+    <updated>2017-10-26T15:59:38.957Z</updated>
     
     <content type="html"><![CDATA[<h1 id="【笔记】equals方法重写、相等性测试和继承"><a href="#【笔记】equals方法重写、相等性测试和继承" class="headerlink" title="【笔记】equals方法重写、相等性测试和继承"></a>【笔记】equals方法重写、相等性测试和继承</h1><h3 id="一、equals方法重写"><a href="#一、equals方法重写" class="headerlink" title="一、equals方法重写"></a>一、equals方法重写</h3><p>Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。<br>重写equals方法，一般采取以下步骤：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public booleanequals(Object other)&#123;</div><div class="line">    //如果两个对象具有相同的引用则返回true，这是一条优化</div><div class="line">    if (this==other) return true;</div><div class="line">    //如果other为null，返回false</div><div class="line">    if (other==null) return false;</div><div class="line">    //如果两个对象不属于同一个类，返回false</div><div class="line">    if (getClass()!=other.getClass()) return false;</div><div class="line">    //现在可以确定两个对象属于同一个类，进行类型转换，假设this属于Person类</div><div class="line">    Person oth=(Person)other;</div><div class="line">    //依次判断实例域是否相等</div><div class="line">    return field1.equals(oth.field1)&amp;&amp;(field2==oth.field2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -69,6 +73,8 @@
     
     </summary>
     
+    
+      <category term="Java" scheme="https://jqs1970291214.github.io/MyBlog/tags/Java/"/>
     
   </entry>
   

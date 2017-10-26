@@ -78,7 +78,7 @@
 <link href="/MyBlog/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="C++," />
 
 
 
@@ -97,13 +97,14 @@
 
 
 <meta name="description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
+<meta name="keywords" content="C++">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++指针辨析">
 <meta property="og:url" content="https://jqs1970291214.github.io/MyBlog/2017/10/26/C-指针辨析/index.html">
 <meta property="og:site_name" content="君青诵">
 <meta property="og:description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-26T15:54:19.370Z">
+<meta property="og:updated_time" content="2017-10-26T15:59:08.691Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++指针辨析">
 <meta name="twitter:description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
@@ -371,7 +372,8 @@
       
 
       
-        <h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+        <a id="more"></a>
+<h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <hr>
 <h6 id="第一次修改：2016-12-31-0-04"><a href="#第一次修改：2016-12-31-0-04" class="headerlink" title="第一次修改：2016-12-31 0:04"></a>第一次修改：2016-12-31 0:04</h6><h6 id="第二次修改：2017-1-4-22-07"><a href="#第二次修改：2017-1-4-22-07" class="headerlink" title="第二次修改：2017/1/4 22:07"></a>第二次修改：2017/1/4 22:07</h6>
       
@@ -387,6 +389,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/MyBlog/tags/C/" rel="tag"># C++</a>
+          
+        </div>
       
 
       
@@ -490,6 +498,15 @@
 
           
 
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
           
 
         </nav>
