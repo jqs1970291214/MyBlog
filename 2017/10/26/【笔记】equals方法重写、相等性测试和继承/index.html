@@ -96,17 +96,17 @@
 
 
 
-<meta name="description" content="Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your advice!">
+<meta name="description" content="【笔记】equals方法重写、相等性测试和继承一、equals方法重写Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。重写equals方法，一般采取以下步骤： 123456789101112public booleanequals(Objec">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Introduction">
-<meta property="og:url" content="https://jqs1970291214.github.io/MyBlog/2017/08/08/Introduction/index.html">
+<meta property="og:title" content="【笔记】equals方法重写、相等性测试和继承">
+<meta property="og:url" content="https://jqs1970291214.github.io/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/index.html">
 <meta property="og:site_name" content="君青诵">
-<meta property="og:description" content="Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your advice!">
+<meta property="og:description" content="【笔记】equals方法重写、相等性测试和继承一、equals方法重写Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。重写equals方法，一般采取以下步骤： 123456789101112public booleanequals(Objec">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-08T08:59:59.595Z">
+<meta property="og:updated_time" content="2017-10-26T15:06:12.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Introduction">
-<meta name="twitter:description" content="Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your advice!">
+<meta name="twitter:title" content="【笔记】equals方法重写、相等性测试和继承">
+<meta name="twitter:description" content="【笔记】equals方法重写、相等性测试和继承一、equals方法重写Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。重写equals方法，一般采取以下步骤： 123456789101112public booleanequals(Objec">
 
 
 
@@ -135,13 +135,13 @@
 
 
 
-  <link rel="canonical" href="https://jqs1970291214.github.io/MyBlog/2017/08/08/Introduction/"/>
+  <link rel="canonical" href="https://jqs1970291214.github.io/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/"/>
 
 
 
 
 
-  <title>Introduction | 君青诵</title>
+  <title>【笔记】equals方法重写、相等性测试和继承 | 君青诵</title>
   
 
 
@@ -304,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://jqs1970291214.github.io/MyBlog/MyBlog/2017/08/08/Introduction/">
+    <link itemprop="mainEntityOfPage" href="https://jqs1970291214.github.io/MyBlog/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JQS">
@@ -321,7 +321,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Introduction</h1>
+          <h1 class="post-title" itemprop="name headline">【笔记】equals方法重写、相等性测试和继承</h1>
         
 
         <div class="post-meta">
@@ -333,8 +333,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T16:55:01+08:00">
-                2017-08-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T23:05:44+08:00">
+                2017-10-26
               </time>
             
 
@@ -371,7 +371,25 @@
       
 
       
-        <p>Welcome to My Blog! It’s a place where I share my articles that mainly about literature and information technology to you.Thanks for your advice!</p>
+        <h1 id="【笔记】equals方法重写、相等性测试和继承"><a href="#【笔记】equals方法重写、相等性测试和继承" class="headerlink" title="【笔记】equals方法重写、相等性测试和继承"></a>【笔记】equals方法重写、相等性测试和继承</h1><h3 id="一、equals方法重写"><a href="#一、equals方法重写" class="headerlink" title="一、equals方法重写"></a>一、equals方法重写</h3><p>Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。<br>重写equals方法，一般采取以下步骤：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public booleanequals(Object other)&#123;</div><div class="line">    //如果两个对象具有相同的引用则返回true，这是一条优化</div><div class="line">    if (this==other) return true;</div><div class="line">    //如果other为null，返回false</div><div class="line">    if (other==null) return false;</div><div class="line">    //如果两个对象不属于同一个类，返回false</div><div class="line">    if (getClass()!=other.getClass()) return false;</div><div class="line">    //现在可以确定两个对象属于同一个类，进行类型转换，假设this属于Person类</div><div class="line">    Person oth=(Person)other;</div><div class="line">    //依次判断实例域是否相等</div><div class="line">    return field1.equals(oth.field1)&amp;&amp;(field2==oth.field2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在覆盖equals方法时，必须使方法名和形参列表和父类一致，由方法名和参数列表组成的方法签名在方法重载起到关键作用，意味着以下写法是不允许的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public boolean equals(Object oth)&#123;&#125;</div><div class="line">public int equals(Object oth)&#123;&#125;</div></pre></td></tr></table></figure>
+<p>我们可以使用@Override来标记被重写的方法，如果方法没有被成功重写，则会给出错误报告，这是一个有效避免错误的小技巧。<br>在判断实例域时，当实例域为对象时应该使用Objects.equals方法，以避免空指针异常，比如上面代码最后一行应改为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">return Objects.equals(field1,field2)&amp;&amp;(field2==oth.field2);</div></pre></td></tr></table></figure>
+<p>使用该方法需要导入java.util.Objects,如果两个参数都为null，返回true；如果仅有一个为null，返回false，否则调用</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">para1.equals(para2);</div></pre></td></tr></table></figure>
+<p>该方法源码实现摘录如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static boolean equals(Object a,Object b)&#123;</div><div class="line"></div><div class="line">    return (a == b) || (a != null &amp;&amp; a.equal=s(b)); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="二、相等测试和继承"><a href="#二、相等测试和继承" class="headerlink" title="二、相等测试和继承"></a>二、相等测试和继承</h3><p>如果两个参数不属于一个类，问题就会变得复杂。很多人单纯使用instanceof进行测试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if(!(otherinstanceof thisObj)) return false;</div></pre></td></tr></table></figure></p>
+<p>不过这么做并没有解决other是thisObj子类的对象的问题，而且违反了equals方法的对称性，Java语言规范要求equals方法的对称性：当且仅当x.equals(y);返回true，y.equals(x);也应该返回true。如果son和父类father共同的域相等且子类中重写了equals方法，按照（一）中的方法，faher.equals(son)会返回true，而son.equals(father)则会返回false，这显然是不合适的。<br>为了改进这个问题，写出更完美的equals方法，可以进行以下判断：</p>
+<ul>
+<li>如果相等的概念由父类决定，可以使用instanceof进行检测，这样还有利于检测由父类派生出的多个子类的对象之间的相等性。</li>
+<li>如果相等的概念由子类决定，equals方法的对称性强制使用getClass()进行检测。</li>
+</ul>
+<p>在对代码进行修改时，如果相等的概念由子类决定则（一）中代码保持不变。如果相等的概念由父类决定，那么（一）中在判断完other不为null后的第三步改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if(!(otherinstanceof Person)) return false;</div></pre></td></tr></table></figure></p>
+<hr>
+<p>2017.7.31 18:00第一次编辑</p>
 
       
     </div>
@@ -396,8 +414,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/MyBlog/2017/08/04/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/MyBlog/2017/08/08/Introduction/" rel="next" title="Introduction">
+                <i class="fa fa-chevron-left"></i> Introduction
               </a>
             
           </div>
@@ -406,8 +424,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/" rel="prev" title="【笔记】equals方法重写、相等性测试和继承">
-                【笔记】equals方法重写、相等性测试和继承 <i class="fa fa-chevron-right"></i>
+              <a href="/MyBlog/2017/10/26/a/" rel="prev" title="a">
+                a <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -460,8 +478,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/MyBlog/img/head.jpg"
@@ -512,6 +539,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#【笔记】equals方法重写、相等性测试和继承"><span class="nav-number">1.</span> <span class="nav-text">【笔记】equals方法重写、相等性测试和继承</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、equals方法重写"><span class="nav-number">1.0.1.</span> <span class="nav-text">一、equals方法重写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、相等测试和继承"><span class="nav-number">1.0.2.</span> <span class="nav-text">二、相等测试和继承</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
