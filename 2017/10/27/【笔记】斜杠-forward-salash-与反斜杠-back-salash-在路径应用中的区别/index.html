@@ -103,12 +103,10 @@
 <meta property="og:site_name" content="君青诵">
 <meta property="og:description" content="【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别一、各系统下的文件路径 unix系统中使用斜杠（/）作为路径分隔符。  Windows早期使用斜杠（/）作为DOS命令提示符的参数标志。  为了防止混淆，采用反斜杠（\） 作为路径分隔符。所以目前windows系统上的文件浏览器都是用 反斜杠（\） 作为路径分隔符。随着发展，DOS系统已经被淘汰了，命令">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="c:/Users/Administrator/Desktop/1.png">
-<meta property="og:updated_time" content="2017-10-27T02:48:07.214Z">
+<meta property="og:updated_time" content="2017-10-27T02:51:08.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别">
 <meta name="twitter:description" content="【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别一、各系统下的文件路径 unix系统中使用斜杠（/）作为路径分隔符。  Windows早期使用斜杠（/）作为DOS命令提示符的参数标志。  为了防止混淆，采用反斜杠（\） 作为路径分隔符。所以目前windows系统上的文件浏览器都是用 反斜杠（\） 作为路径分隔符。随着发展，DOS系统已经被淘汰了，命令">
-<meta name="twitter:image" content="c:/Users/Administrator/Desktop/1.png">
 
 
 
@@ -380,14 +378,8 @@
 <h3 id="二、C语言中的文件路径字符串"><a href="#二、C语言中的文件路径字符串" class="headerlink" title="二、C语言中的文件路径字符串"></a><p color="red">二、C语言中的文件路径字符串</p></h3></li>
 </ol>
 <p>在Windows下的C（C++）语言中，由于Windows路径使用反斜杠\，但“\”同时是转义序列的引导，所以要写成“\”，比如文件路径字符串”C:\Users\Administrator\Destop\filename.file”。而在Unix，Linux和其他类Unix系统中，使用斜杠（/)。</p>
-<h3 id="三、网络领域的的应用"><a href="#三、网络领域的的应用" class="headerlink" title="三、网络领域的的应用"></a><p color="red">三、网络领域的的应用</p></h3><p>1.由于早期web应用受Unix的影响。浏览器地址栏的网址，URL统一资源定位符使用斜杠（/）。<br>2.在HTML中涉及网络文件地址的要使用斜杠（/），比如</p>
-<blockquote>
-<p></p><p style="background-image:url(root/img/pic.jpg);"> </p>，<p></p>
-</blockquote>
-<p>段落的背景图片样式属性的路径必须使用斜杠，反斜杠无效。<br>涉及到本地文件（windows）路径，斜杠反斜杠均可，比如</p>
-<blockquote>
-<p><img src="C:/Users\Administrator/Desktop\1.png"></p>
-</blockquote>
+<h3 id="三、网络领域的的应用"><a href="#三、网络领域的的应用" class="headerlink" title="三、网络领域的的应用"></a><p color="red">三、网络领域的的应用</p></h3><p>1.由于早期web应用受Unix的影响。浏览器地址栏的网址，URL统一资源定位符使用斜杠（/）。<br>2.在HTML中涉及网络文件地址的要使用斜杠（/），比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;p style=&quot;background-image:url(root/img/pic.jpg);&quot;&gt; &lt;/p&gt;，</div></pre></td></tr></table></figure></p>
+<p>段落的背景图片样式属性的路径必须使用斜杠，反斜杠无效。<br>涉及到本地文件（windows）路径，斜杠反斜杠均可，比如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;img src=&quot;C:/Users\Administrator/Desktop\1.png&quot; /&gt;</div></pre></td></tr></table></figure></p>
 <hr>
 <h6 id="2017-2-11-23-37第一次修改"><a href="#2017-2-11-23-37第一次修改" class="headerlink" title="2017.2.11 23:37第一次修改"></a>2017.2.11 23:37第一次修改</h6>
       
