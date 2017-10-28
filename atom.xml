@@ -5,7 +5,7 @@
   <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2017-10-28T05:36:06.092Z</updated>
+  <updated>2017-10-28T05:42:24.367Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -20,12 +20,12 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/28/%E3%80%90%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%E3%80%91%E7%94%B0%E5%BF%8C%E8%B5%9B%E9%A9%AC/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/28/【贪心算法】田忌赛马/</id>
     <published>2017-10-28T05:28:14.000Z</published>
-    <updated>2017-10-28T05:36:06.092Z</updated>
+    <updated>2017-10-28T05:42:24.367Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、故事背景"><a href="#一、故事背景" class="headerlink" title="一、故事背景"></a>一、故事背景</h3><p>  田忌赛马出自《史记》卷六十五：《孙子吴起列传第五》，是中国历史上有名的揭示如何善用自己的长处去对付对手的短处，从而在竞技中获胜的事例。</p>
 <p>  齐使者如梁，孙膑以刑徒阴见，说齐使。齐使以为奇，窃载与之齐。齐将田忌善而客待之。忌数与齐诸公子驰逐重射。孙子见其马足不甚相远，马有上、中、下辈。于是孙子谓田忌曰：“君弟重射，臣能令君胜。”田忌信然之，与王及诸公子逐射千金。及临质，孙子曰：“今以君之下驷与彼上驷，取君上驷与彼中驷，取君中驷与彼下驷。”既驰三辈毕，而田忌一不胜而再胜，卒得王千金。于是忌进孙子于威王。威王问兵法，遂以为师。</p>
 <p>  译文：齐国使者到大梁来，孙膑以刑徒的身份秘密拜见，劝说齐国使者。齐国使者觉得此人是个奇人，就偷偷地把他载回齐国。齐国将军田忌非常赏识他，并且待如上宾。田忌经常与齐国众公子赛马，设重金赌注。孙膑发现他们的马脚力都差不多，马分为上、中、下三等，于是对田忌说：“您只管下大赌注，我能让您取胜。”田忌相信并答应了他，与齐王和各位公子用千金来赌注。比赛即将开始，孙膑说：“现在用您的下等马对付他们的上等马，用您的上等马对付他们的中等马，用您的中等马对付他们的下等马。”已经比了三场比赛，田忌一场败而两场胜，最终赢得齐王的千金赌注。于是田忌把孙膑推荐给齐威王。齐威王向他请教了兵法，于是把他当成老师。</p>
-<h3 id="二、题目HUD1052-Tian-Ji-–-The-Horse-Racing"><a href="#二、题目HUD1052-Tian-Ji-–-The-Horse-Racing" class="headerlink" title="二、题目HUD1052 Tian Ji – The Horse Racing"></a>二、题目HUD1052 Tian Ji – The Horse Racing</h3><p><img src="/img/tianji.png" alt="田忌赛马"></p>
+<h3 id="二、题目HUD1052-Tian-Ji-–-The-Horse-Racing"><a href="#二、题目HUD1052-Tian-Ji-–-The-Horse-Racing" class="headerlink" title="二、题目HUD1052 Tian Ji – The Horse Racing"></a>二、题目HUD1052 Tian Ji – The Horse Racing</h3><p><img src="/MyBlog/img/tianji.png" alt="田忌赛马"></p>
 <h3 id="三、样例输入输出"><a href="#三、样例输入输出" class="headerlink" title="三、样例输入输出"></a>三、样例输入输出</h3><ol>
 <li>输入<br>3<br><br>92 83 71<br><br>95 87 74<br><br>2<br><br>20 20 <br><br>20 20 <br><br>2<br><br>20 19<br><br>22 18 <br><br>0<br></li>
 <li>输出<br>200<br><br>0 <br><br>0<br><h3 id="四、算法思想-贪心（几率最大化-最大收益）"><a href="#四、算法思想-贪心（几率最大化-最大收益）" class="headerlink" title="四、算法思想 贪心（几率最大化 最大收益）"></a>四、算法思想 贪心（几率最大化 最大收益）</h3>首先将两者的马按速度递增排序，然后按照一至五条件依次进行判断，其中包括（田【最快】=齐【最快】 and 田【最慢】=齐【最慢】）的情况，按照条件5执行。<ol>
