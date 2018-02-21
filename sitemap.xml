@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://jqs1970291214.github.io/MyBlog/tags/index.html</loc>
+    
+    <lastmod>2018-02-21T09:49:35.296Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://jqs1970291214.github.io/MyBlog/categories/index.html</loc>
+    
+    <lastmod>2018-02-21T09:49:22.506Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://jqs1970291214.github.io/MyBlog/2018/02/21/test/</loc>
     
     <lastmod>2018-02-21T09:33:51.796Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>https://jqs1970291214.github.io/MyBlog/2017/10/31/%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/</loc>
     
     <lastmod>2017-10-31T02:29:40.226Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jqs1970291214.github.io/MyBlog/tags/index.html</loc>
-    
-    <lastmod>2017-10-29T07:44:25.209Z</lastmod>
     
   </url>
   
@@ -68,13 +75,6 @@
     <loc>https://jqs1970291214.github.io/MyBlog/about/index.html</loc>
     
     <lastmod>2017-08-08T09:05:08.985Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://jqs1970291214.github.io/MyBlog/categories/index.html</loc>
-    
-    <lastmod>2017-08-05T01:00:55.658Z</lastmod>
     
   </url>
   
