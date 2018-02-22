@@ -5,7 +5,7 @@
   <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2018-02-21T09:33:51.796Z</updated>
+  <updated>2018-02-22T10:10:56.377Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -16,33 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>test</title>
-    <link href="https://jqs1970291214.github.io/MyBlog/2018/02/21/test/"/>
-    <id>https://jqs1970291214.github.io/MyBlog/2018/02/21/test/</id>
-    <published>2018-02-21T09:11:00.000Z</published>
-    <updated>2018-02-21T09:33:51.796Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="test-it"><a href="#test-it" class="headerlink" title="test it"></a>test it</h1><p>The First Paragraph</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;test-it&quot;&gt;&lt;a href=&quot;#test-it&quot; class=&quot;headerlink&quot; title=&quot;test it&quot;&gt;&lt;/a&gt;test it&lt;/h1&gt;&lt;p&gt;The First Paragraph&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="test" scheme="https://jqs1970291214.github.io/MyBlog/categories/test/"/>
-    
-    
-      <category term="test" scheme="https://jqs1970291214.github.io/MyBlog/tags/test/"/>
-    
-  </entry>
-  
-  <entry>
     <title>一种简单加密算法</title>
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/31/%E4%B8%80%E7%A7%8D%E7%AE%80%E5%8D%95%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/31/一种简单加密算法/</id>
     <published>2017-10-31T02:29:17.000Z</published>
-    <updated>2018-02-21T10:07:08.137Z</updated>
+    <updated>2018-02-22T10:10:56.377Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、原理：计算机逻辑运算（xor-ASC2码表（字符串处理）"><a href="#一、原理：计算机逻辑运算（xor-ASC2码表（字符串处理）" class="headerlink" title="一、原理：计算机逻辑运算（xor)+ASC2码表（字符串处理）"></a>一、原理：计算机逻辑运算（xor)+ASC2码表（字符串处理）</h3><h3 id="二、代码-nbsp-nbsp-nbsp-Pasca语言"><a href="#二、代码-nbsp-nbsp-nbsp-Pasca语言" class="headerlink" title="二、代码&nbsp;&nbsp;&nbsp;(Pasca语言)"></a>二、代码&nbsp;&nbsp;&nbsp;(Pasca语言)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line">type</div><div class="line"></div><div class="line">  re=record</div><div class="line"></div><div class="line">   mingv:string;</div><div class="line"></div><div class="line">   miv:array[1..100000] of integer;</div><div class="line"></div><div class="line">   smiv:array[1..100000] of string;</div><div class="line"></div><div class="line">   l:longint;</div><div class="line"></div><div class="line">   end;</div><div class="line"></div><div class="line">var</div><div class="line"></div><div class="line">  s:array[1..10] of re; </div><div class="line"></div><div class="line">  hs,js,caozuo,jmv,nc:longint;</div><div class="line"></div><div class="line">  sc:string;</div><div class="line"></div><div class="line">    </div><div class="line"></div><div class="line">procedure encrypt;</div><div class="line"></div><div class="line">  var k:longint;</div><div class="line"></div><div class="line">  begin</div><div class="line"></div><div class="line">     s[js].l:=length(s[js].mingv);</div><div class="line"></div><div class="line">     for k:=1 to s[js].l do </div><div class="line"></div><div class="line">      begin</div><div class="line"></div><div class="line">       s[js].miv[k]:=ord(s[js].mingv[k]);</div><div class="line"></div><div class="line">       if s[js].miv[k]&lt;100 then s[js].miv[k]:=s[js].miv[k]*4;</div><div class="line"></div><div class="line">       s[js].miv[k]:=s[js].miv[k] xor jmv;</div><div class="line"></div><div class="line">       write(s[js].miv[k],&apos; &apos;);</div><div class="line"></div><div class="line">      end;</div><div class="line"></div><div class="line">  end;</div><div class="line"></div><div class="line">procedure decode;</div><div class="line"></div><div class="line">  begin</div><div class="line"></div><div class="line">    while pos(&apos; &apos;,s[js].mingv) &lt;&gt;0 do </div><div class="line"></div><div class="line">     begin</div><div class="line"></div><div class="line">       sc:=copy(s[js].mingv,1,pos(&apos; &apos;,s[js].mingv)-1);</div><div class="line"></div><div class="line">       delete(s[js].mingv,1,pos(&apos; &apos;,s[js].mingv));</div><div class="line"></div><div class="line">       val(sc,nc);</div><div class="line"></div><div class="line">       nc:=nc xor jmv;</div><div class="line"></div><div class="line">       if nc&gt;122 then nc:=nc div 4;</div><div class="line"></div><div class="line">       write(chr(nc));</div><div class="line"></div><div class="line">     end;</div><div class="line">       val(s[js].mingv,nc);</div><div class="line"></div><div class="line">       nc:=nc xor jmv;</div><div class="line"></div><div class="line">       if nc&gt;122 then nc:=nc div 4;</div><div class="line"></div><div class="line">       write(chr(nc))；</div><div class="line"></div><div class="line">  end;</div><div class="line"></div><div class="line">begin</div><div class="line"></div><div class="line">   assign(input,&apos;in.txt&apos;);</div><div class="line"></div><div class="line">   assign(output,&apos;out.txt&apos;);</div><div class="line"></div><div class="line">   reset(input);</div><div class="line"></div><div class="line">   rewrite(output);</div><div class="line"></div><div class="line">   writeln(&apos;what you want to do?&apos;);</div><div class="line"></div><div class="line">   writeln(&apos;encrypt --1 or decode  --2?&apos;);</div><div class="line"></div><div class="line">   writeln(&apos;linenumber &amp; key&apos;);</div><div class="line"></div><div class="line">   readln(caozuo);</div><div class="line"></div><div class="line">   if caozuo=1 then begin</div><div class="line"></div><div class="line">     readln(hs,jmv);</div><div class="line"></div><div class="line">     for js:=1 to hs do readln(s[js].mingv);</div><div class="line"></div><div class="line">     writeln(&apos;text:&apos;);</div><div class="line"></div><div class="line">     for js:=1 to hs do begin encrypt; writeln; end;</div><div class="line"></div><div class="line">     writeln;</div><div class="line"></div><div class="line">     writeln(&apos;key:&apos;);</div><div class="line"></div><div class="line">     writeln(not jmv);</div><div class="line"></div><div class="line">   end</div><div class="line"></div><div class="line">  else if caozuo=2 then begin</div><div class="line"></div><div class="line">    readln(hs,jmv);</div><div class="line"></div><div class="line">    jmv:=not jmv;</div><div class="line"></div><div class="line">    for js:=1 to hs do readln(s[js].mingv);</div><div class="line"></div><div class="line">    writeln(&apos;text:&apos;);</div><div class="line"></div><div class="line">    for js:=1 to hs do begin decode;writeln;  end;</div><div class="line"></div><div class="line">   end;</div><div class="line"></div><div class="line">   close(input);</div><div class="line"></div><div class="line">   close(output);</div><div class="line"></div><div class="line">end.</div></pre></td></tr></table></figure>
 <h3 id="三、输入-（文件in-txt）"><a href="#三、输入-（文件in-txt）" class="headerlink" title="三、输入 （文件in.txt）"></a>三、输入 （文件in.txt）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">加密（1）1</div><div class="line"></div><div class="line">    （2）行数 密钥  （整数）                                 </div><div class="line">    （3）明文</div><div class="line"></div><div class="line">解密（1）2</div><div class="line"></div><div class="line">     （2）行数 反密钥                                   </div><div class="line"></div><div class="line">     （3）明文</div><div class="line"></div><div class="line"> </div><div class="line"></div><div class="line">Example：</div><div class="line"></div><div class="line">  1</div><div class="line"></div><div class="line">  1 1314</div><div class="line"></div><div class="line">  Good morning,sir</div></pre></td></tr></table></figure>
@@ -56,8 +34,12 @@
     
     </summary>
     
+      <category term="算法" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="算法" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="加密" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E5%8A%A0%E5%AF%86/"/>
+    
+      <category term="Pascal" scheme="https://jqs1970291214.github.io/MyBlog/tags/Pascal/"/>
     
   </entry>
   
@@ -66,7 +48,7 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/29/%E3%80%90%E9%9B%86%E3%80%91%E4%BD%95%E5%A4%84%E8%BD%BB%E5%90%9F%E6%B5%85%E5%94%B1/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/29/【集】何处轻吟浅唱/</id>
     <published>2017-10-29T07:36:49.000Z</published>
-    <updated>2018-02-21T10:07:32.374Z</updated>
+    <updated>2018-02-22T10:11:56.803Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li><p>生死契阔，与子成说，执子之手，与子偕老。</p>
@@ -332,8 +314,12 @@
     
     </summary>
     
+      <category term="文艺" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E6%96%87%E8%89%BA/"/>
     
-      <category term="文艺" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E6%96%87%E8%89%BA/"/>
+    
+      <category term="诗词" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E8%AF%97%E8%AF%8D/"/>
+    
+      <category term="短句" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E7%9F%AD%E5%8F%A5/"/>
     
   </entry>
   
@@ -342,7 +328,7 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/28/%E3%80%90%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95%E3%80%91%E7%94%B0%E5%BF%8C%E8%B5%9B%E9%A9%AC/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/28/【贪心算法】田忌赛马/</id>
     <published>2017-10-28T05:28:14.000Z</published>
-    <updated>2018-02-21T10:07:19.876Z</updated>
+    <updated>2018-02-22T10:09:36.748Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、故事背景"><a href="#一、故事背景" class="headerlink" title="一、故事背景"></a>一、故事背景</h3><p>  田忌赛马出自《史记》卷六十五：《孙子吴起列传第五》，是中国历史上有名的揭示如何善用自己的长处去对付对手的短处，从而在竞技中获胜的事例。</p>
 <p>  齐使者如梁，孙膑以刑徒阴见，说齐使。齐使以为奇，窃载与之齐。齐将田忌善而客待之。忌数与齐诸公子驰逐重射。孙子见其马足不甚相远，马有上、中、下辈。于是孙子谓田忌曰：“君弟重射，臣能令君胜。”田忌信然之，与王及诸公子逐射千金。及临质，孙子曰：“今以君之下驷与彼上驷，取君上驷与彼中驷，取君中驷与彼下驷。”既驰三辈毕，而田忌一不胜而再胜，卒得王千金。于是忌进孙子于威王。威王问兵法，遂以为师。</p>
@@ -368,8 +354,12 @@
     
     </summary>
     
+      <category term="算法" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E7%AE%97%E6%B3%95/"/>
     
-      <category term="算法" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="题解" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E9%A2%98%E8%A7%A3/"/>
+    
+      <category term="贪心" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E8%B4%AA%E5%BF%83/"/>
     
   </entry>
   
@@ -377,8 +367,8 @@
     <title>【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别</title>
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/27/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91%E6%96%9C%E6%9D%A0-forward-salash-%E4%B8%8E%E5%8F%8D%E6%96%9C%E6%9D%A0-back-salash-%E5%9C%A8%E8%B7%AF%E5%BE%84%E5%BA%94%E7%94%A8%E4%B8%AD%E7%9A%84%E5%8C%BA%E5%88%AB/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/27/【笔记】斜杠-forward-salash-与反斜杠-back-salash-在路径应用中的区别/</id>
-    <published>2017-10-27T02:46:18.000Z</published>
-    <updated>2018-02-21T10:07:44.443Z</updated>
+    <published>2017-10-27T02:46:18.194Z</published>
+    <updated>2018-02-22T10:07:13.444Z</updated>
     
     <content type="html"><![CDATA[<h1 id="【笔记】斜杠-forward-salash-与反斜杠-back-salash-在路径应用中的区别"><a href="#【笔记】斜杠-forward-salash-与反斜杠-back-salash-在路径应用中的区别" class="headerlink" title="【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别"></a>【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别</h1><h3 id="一、各系统下的文件路径"><a href="#一、各系统下的文件路径" class="headerlink" title="一、各系统下的文件路径"></a><p color="red">一、各系统下的文件路径</p></h3><ol>
 <li><p>unix系统中使用斜杠（/）作为路径分隔符。</p>
@@ -398,8 +388,12 @@
     
     </summary>
     
+      <category term="辨析" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E8%BE%A8%E6%9E%90/"/>
+    
     
       <category term="辨析" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E8%BE%A8%E6%9E%90/"/>
+    
+      <category term="路径" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E8%B7%AF%E5%BE%84/"/>
     
   </entry>
   
@@ -408,7 +402,7 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/26/C-%E6%8C%87%E9%92%88%E8%BE%A8%E6%9E%90/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/26/C-指针辨析/</id>
     <published>2017-10-26T15:49:40.000Z</published>
-    <updated>2017-10-26T15:59:08.691Z</updated>
+    <updated>2018-02-22T10:10:11.769Z</updated>
     
     <content type="html"><![CDATA[<a id="more"></a>
 <h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -422,8 +416,12 @@
     
     </summary>
     
+      <category term="辨析" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E8%BE%A8%E6%9E%90/"/>
+    
     
       <category term="C++" scheme="https://jqs1970291214.github.io/MyBlog/tags/C/"/>
+    
+      <category term="指针" scheme="https://jqs1970291214.github.io/MyBlog/tags/%E6%8C%87%E9%92%88/"/>
     
   </entry>
   
@@ -432,7 +430,7 @@
     <link href="https://jqs1970291214.github.io/MyBlog/2017/10/26/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91equals%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E3%80%81%E7%9B%B8%E7%AD%89%E6%80%A7%E6%B5%8B%E8%AF%95%E5%92%8C%E7%BB%A7%E6%89%BF/"/>
     <id>https://jqs1970291214.github.io/MyBlog/2017/10/26/【笔记】equals方法重写、相等性测试和继承/</id>
     <published>2017-10-26T15:05:44.000Z</published>
-    <updated>2018-02-21T10:08:44.621Z</updated>
+    <updated>2018-02-22T10:07:57.755Z</updated>
     
     <content type="html"><![CDATA[<h1 id="【笔记】equals方法重写、相等性测试和继承"><a href="#【笔记】equals方法重写、相等性测试和继承" class="headerlink" title="【笔记】equals方法重写、相等性测试和继承"></a>【笔记】equals方法重写、相等性测试和继承</h1><h3 id="一、equals方法重写"><a href="#一、equals方法重写" class="headerlink" title="一、equals方法重写"></a>一、equals方法重写</h3><p>Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。<br>重写equals方法，一般采取以下步骤：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public booleanequals(Object other)&#123;</div><div class="line">    //如果两个对象具有相同的引用则返回true，这是一条优化</div><div class="line">    if (this==other) return true;</div><div class="line">    //如果other为null，返回false</div><div class="line">    if (other==null) return false;</div><div class="line">    //如果两个对象不属于同一个类，返回false</div><div class="line">    if (getClass()!=other.getClass()) return false;</div><div class="line">    //现在可以确定两个对象属于同一个类，进行类型转换，假设this属于Person类</div><div class="line">    Person oth=(Person)other;</div><div class="line">    //依次判断实例域是否相等</div><div class="line">    return field1.equals(oth.field1)&amp;&amp;(field2==oth.field2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -461,10 +459,10 @@
     
     </summary>
     
-      <category term="程序" scheme="https://jqs1970291214.github.io/MyBlog/categories/%E7%A8%8B%E5%BA%8F/"/>
+      <category term="Java" scheme="https://jqs1970291214.github.io/MyBlog/categories/Java/"/>
     
     
-      <category term="Java" scheme="https://jqs1970291214.github.io/MyBlog/tags/Java/"/>
+      <category term="JavaSE" scheme="https://jqs1970291214.github.io/MyBlog/tags/JavaSE/"/>
     
   </entry>
   
