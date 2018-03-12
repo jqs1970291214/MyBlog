@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Junqson</title>
   <subtitle>Fighting For Future</subtitle>
-  <link href="/atom.xml" rel="self"/>
+  <link href="/MyBlog/atom.xml" rel="self"/>
   
   <link href="https://jqs1970291214.github.io/MyBlog/"/>
-  <updated>2018-03-07T01:52:57.350Z</updated>
+  <updated>2018-02-22T10:10:56.378Z</updated>
   <id>https://jqs1970291214.github.io/MyBlog/</id>
   
   <author>
@@ -14,20 +14,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="https://jqs1970291214.github.io/MyBlog/2018/03/07/test/"/>
-    <id>https://jqs1970291214.github.io/MyBlog/2018/03/07/test/</id>
-    <published>2018-03-07T01:52:57.349Z</published>
-    <updated>2018-03-07T01:52:57.350Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>一种简单加密算法</title>
