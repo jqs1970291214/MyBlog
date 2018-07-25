@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法,canvas," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="趁着暑期有点时间，还是应该静下心来写点东西的，更新一下好久不更的博客。几个月前研究的东西，现在整理一下。 1. 原理读取图片或视频中的某一帧中的抽样像素点，获取rgb值，根据彩色转灰度的心理学公式:  Gray = R0.299 + G0.587 + B*0.114  计算出灰度值g,然后将灰度g映射到字符c(g),打印输出  效果图  2. 实现（canvas + js）(1) 界面部分（略去c">
+<meta name="keywords" content="算法,canvas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片视频转字符画">
+<meta property="og:url" content="http://www.junqson.xin/2018/07/25/图片视频转字符画/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="趁着暑期有点时间，还是应该静下心来写点东西的，更新一下好久不更的博客。几个月前研究的东西，现在整理一下。 1. 原理读取图片或视频中的某一帧中的抽样像素点，获取rgb值，根据彩色转灰度的心理学公式:  Gray = R0.299 + G0.587 + B*0.114  计算出灰度值g,然后将灰度g映射到字符c(g),打印输出  效果图  2. 实现（canvas + js）(1) 界面部分（略去c">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://www.junqson.xin/img/charmap.jpg">
+<meta property="og:updated_time" content="2018-07-25T05:15:36.832Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图片视频转字符画">
+<meta name="twitter:description" content="趁着暑期有点时间，还是应该静下心来写点东西的，更新一下好久不更的博客。几个月前研究的东西，现在整理一下。 1. 原理读取图片或视频中的某一帧中的抽样像素点，获取rgb值，根据彩色转灰度的心理学公式:  Gray = R0.299 + G0.587 + B*0.114  计算出灰度值g,然后将灰度g映射到字符c(g),打印输出  效果图  2. 实现（canvas + js）(1) 界面部分（略去c">
+<meta name="twitter:image" content="http://www.junqson.xin/img/charmap.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2018/07/25/图片视频转字符画/"/>
+
+
+
+
+
+  <title>图片视频转字符画 | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2018/07/25/图片视频转字符画/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">图片视频转字符画</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-25T13:12:00+08:00">
+                2018-07-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>趁着暑期有点时间，还是应该静下心来写点东西的，更新一下好久不更的博客。几个月前研究的东西，现在整理一下。</p>
+<h3 id="1-原理"><a href="#1-原理" class="headerlink" title="1. 原理"></a>1. 原理</h3><p>读取图片或视频中的某一帧中的抽样像素点，获取rgb值，根据彩色转灰度的心理学公式:</p>
+<blockquote>
+<p>Gray = R<em>0.299 + G</em>0.587 + B*0.114<br></p>
+</blockquote>
+<p>计算出灰度值g,然后将灰度g映射到字符c(g),打印输出</p>
+<blockquote>
+<p>效果图<br><br><img src="/img/charmap.jpg" alt="效果图"></p>
+</blockquote>
+<h3 id="2-实现（canvas-js）"><a href="#2-实现（canvas-js）" class="headerlink" title="2. 实现（canvas + js）"></a>2. 实现（canvas + js）</h3><h4 id="1-界面部分（略去css和其他部分）"><a href="#1-界面部分（略去css和其他部分）" class="headerlink" title="(1) 界面部分（略去css和其他部分）"></a>(1) 界面部分（略去css和其他部分）</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">//获取图片表单</div><div class="line">&lt;div class=&quot;bt&quot;&gt;。</div><div class="line">	&lt;form id=&quot;uf&quot;&gt;</div><div class="line">        &lt;input type=&quot;file&quot; name=&quot;file&quot; id=&quot;up-button&quot;/&gt;</div><div class="line">        &lt;input type=&quot;button&quot; id=&quot;button&quot; value=&quot;选择图片&quot;/&gt;</div><div class="line">    &lt;/form&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">//在css中隐藏的canvas，用以绘制图片，获取像素</div><div class="line">&lt;canvas id=&quot;cv&quot;&gt;not support ie23333&lt;/canvas&gt;</div><div class="line">//字符画展示区</div><div class="line">&lt;div id=&quot;txt&quot;&gt;&lt;/div&gt;</div></pre></td></tr></table></figure>
+<h4 id="2-js实现"><a href="#2-js实现" class="headerlink" title="(2) js实现"></a>(2) js实现</h4><ul>
+<li><h5 id="初始工作"><a href="#初始工作" class="headerlink" title="初始工作"></a>初始工作</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">var cv = document.getElementById(&apos;cv&apos;);</div><div class="line">var c = cv.getContext(&apos;2d&apos;);</div><div class="line">var txtDiv = document.getElementById(&apos;txt&apos;);</div><div class="line">var fileBtn = document.getElementById(&quot;up-button&quot;);</div><div class="line">var img = new Image();</div><div class="line">img.src = &apos;abn.jpg&apos;;</div><div class="line">img.onload = init; // 图片加载完开始转换</div><div class="line">fileBtn.onchange = getImg; //绑定获取图片事件</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="计算灰度g-f-r-g-b"><a href="#计算灰度g-f-r-g-b" class="headerlink" title="计算灰度g=f(r,g,b)"></a>计算灰度g=f(r,g,b)</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">// 根据rgb值计算灰度</div><div class="line">function getGray(r, g, b) &#123;</div><div class="line">	return 0.299 * r + 0.578 * g + 0.114 * b; //对于彩色转灰度，有一个很著名的心理学公式：Gray = R*0.299 + G*0.587 + B*0.114</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="映射规则c-c-g"><a href="#映射规则c-c-g" class="headerlink" title="映射规则c=c(g)"></a>映射规则c=c(g)</h5></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">// 根据灰度生成相应字符</div><div class="line">	function toText(g) &#123;</div><div class="line">		if (g &lt;= 30) &#123;</div><div class="line">			return &apos;8&apos;;</div><div class="line">		&#125; else if (g &gt; 30 &amp;&amp; g &lt;= 60) &#123;</div><div class="line">			return &apos;&amp;&apos;;</div><div class="line">		&#125; else if (g &gt; 60 &amp;&amp; g &lt;= 120) &#123;</div><div class="line">			return &apos;$&apos;;</div><div class="line">		&#125;  else if (g &gt; 120 &amp;&amp; g &lt;= 150) &#123;</div><div class="line">			return &apos;*&apos;;</div><div class="line">		&#125; else if (g &gt; 150 &amp;&amp; g &lt;= 180) &#123;</div><div class="line">			return &apos;o&apos;;</div><div class="line">		&#125; else if (g &gt; 180 &amp;&amp; g &lt;= 210) &#123;</div><div class="line">			return &apos;!&apos;;</div><div class="line">		&#125; else if (g &gt; 210 &amp;&amp; g &lt;= 240) &#123;</div><div class="line">			return &apos;;&apos;;</div><div class="line">		&#125;  else &#123;</div><div class="line">			return &apos;.&apos;;</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><h5 id="获取图片"><a href="#获取图片" class="headerlink" title="获取图片"></a>获取图片</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function getImg(file) &#123;</div><div class="line">	var reader = new FileReader();</div><div class="line">	reader.readAsDataURL(fileBtn.files[0]);</div><div class="line">	reader.onload = function () &#123;</div><div class="line">		img.src = reader.result;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><h5 id="主方法"><a href="#主方法" class="headerlink" title="主方法"></a>主方法</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">// 转换</div><div class="line">function init() &#123;</div><div class="line">    //展示区同图片大小</div><div class="line">	txtDiv.style.width = img.width + &apos;px&apos;;</div><div class="line">	cv.width = img.width;</div><div class="line">	cv.height = img.height;</div><div class="line">	//绘制图片</div><div class="line">	c.drawImage(img, 0, 0);</div><div class="line">	//获取像素数据</div><div class="line">	var imgData = c.getImageData(0, 0, img.width, img.height);</div><div class="line">	//获取像素rgba值一维数组</div><div class="line">	var imgDataArr = imgData.data; </div><div class="line">	//横向像素数</div><div class="line">	var imgDataWidth = imgData.width; </div><div class="line">	//纵向像素数</div><div class="line">	var imgDataHeight = imgData.height; </div><div class="line">	var html = &apos;&apos;;</div><div class="line">	//每12行每6列取一个像素，保证原图与生成的图片的大小一致 网页一个字符的默认大小6px * 12px。参数数值可以修改，但是要确保比例必须保证delta h: delta w = 2:1</div><div class="line">	for (h = 0; h &lt; imgDataHeight; h += 12) &#123; </div><div class="line">		var p = &apos;&lt;p&gt;&apos;;</div><div class="line">		for (w = 0; w &lt; imgDataWidth; w += 6) &#123;</div><div class="line">			var index = (w + imgDataWidth * h) * 4; //获取该像素在数组中的r对应的索引，下标从0开始</div><div class="line">			var r = imgDataArr[index + 0];</div><div class="line">			var g = imgDataArr[index + 1];</div><div class="line">			var b = imgDataArr[index + 2];</div><div class="line">			var gray = getGray(r, g, b);//计算灰度值</div><div class="line">			p += toText(gray); </div><div class="line">		&#125;</div><div class="line">		p += &apos;&lt;/p&gt;&apos;;</div><div class="line">		html += p;</div><div class="line">	&#125;</div><div class="line">	txtDiv.innerHTML = html;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3-视频的转换"><a href="#3-视频的转换" class="headerlink" title="3. 视频的转换"></a>3. 视频的转换</h3><p>以上实现了对于图片的字符画转化，对于视频，只需要在图片的基础上，按照一定的频率对视频帧取样，绘制到canvas即可。</p>
+<p>在界面中，替换掉form<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;p&gt;要使用的视频：&lt;/p&gt;</div><div class="line">&lt;video id=&quot;video1&quot; controls autoplay src=&quot;hx.mp4&quot; width=&quot;270px&quot;&gt;&lt;/video&gt;</div><div class="line">&lt;p&gt;画布（每 20 毫秒，代码就会绘制视频的当前帧）：&lt;/p&gt;</div></pre></td></tr></table></figure></p>
+<p>监听video的play事件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var v = document.getElementById(&quot;video1&quot;);</div><div class="line">//获取视频宽高</div><div class="line">var width = v.style.width;</div><div class="line">var height = v.style.height; </div><div class="line"></div><div class="line">v.addEventListener(&apos;play&apos;, function() &#123;</div><div class="line">    var i = window.setInterval(function() &#123;</div><div class="line">        c.drawImage(v, 0, 0, width, height)</div><div class="line">        init();</div><div class="line">    &#125;, 20);</div><div class="line">&#125;, false);</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/31/一种简单加密算法/" rel="next" title="一种简单加密算法">
+                <i class="fa fa-chevron-left"></i> 一种简单加密算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-原理"><span class="nav-number">1.</span> <span class="nav-text">1. 原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-实现（canvas-js）"><span class="nav-number">2.</span> <span class="nav-text">2. 实现（canvas + js）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-界面部分（略去css和其他部分）"><span class="nav-number">2.1.</span> <span class="nav-text">(1) 界面部分（略去css和其他部分）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-js实现"><span class="nav-number">2.2.</span> <span class="nav-text">(2) js实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#初始工作"><span class="nav-number">2.2.1.</span> <span class="nav-text">初始工作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#计算灰度g-f-r-g-b"><span class="nav-number">2.2.2.</span> <span class="nav-text">计算灰度g=f(r,g,b)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#映射规则c-c-g"><span class="nav-number">2.2.3.</span> <span class="nav-text">映射规则c=c(g)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#获取图片"><span class="nav-number">2.2.4.</span> <span class="nav-text">获取图片</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主方法"><span class="nav-number">2.2.5.</span> <span class="nav-text">主方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-视频的转换"><span class="nav-number">3.</span> <span class="nav-text">3. 视频的转换</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
