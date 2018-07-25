@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="C++,指针," />
+  <meta name="keywords" content="JavaSE," />
 
 
 
@@ -96,18 +96,18 @@
 
 
 
-<meta name="description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
-<meta name="keywords" content="C++,指针">
+<meta name="description" content="内部类 成员内部类  12345class Outer&amp;#123;    class inner&amp;#123;            &amp;#125;&amp;#125;  编译后产生outer.class和outer$inner.class   方法内部类  123456789class outer&amp;#123;    public void doSomething()&amp;#123;        class i">
+<meta name="keywords" content="JavaSE">
 <meta property="og:type" content="article">
-<meta property="og:title" content="C++指针辨析">
-<meta property="og:url" content="http://www.junqson.xin/2017/10/26/C-指针辨析/index.html">
+<meta property="og:title" content="java内部类总结">
+<meta property="og:url" content="http://www.junqson.xin/2017/12/10/java内部类总结/index.html">
 <meta property="og:site_name" content="Junqson">
-<meta property="og:description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
+<meta property="og:description" content="内部类 成员内部类  12345class Outer&amp;#123;    class inner&amp;#123;            &amp;#125;&amp;#125;  编译后产生outer.class和outer$inner.class   方法内部类  123456789class outer&amp;#123;    public void doSomething()&amp;#123;        class i">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-22T10:10:11.770Z">
+<meta property="og:updated_time" content="2018-07-25T07:03:29.780Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++指针辨析">
-<meta name="twitter:description" content="C++指针辨析12345678910111213141516171819202122232425262728293031323334353637383940#include &amp;lt;iostream&amp;gt;using namespace std;int main()&amp;#123;       int a1[2];    int a2[2];    int a3[2];        int *p;">
+<meta name="twitter:title" content="java内部类总结">
+<meta name="twitter:description" content="内部类 成员内部类  12345class Outer&amp;#123;    class inner&amp;#123;            &amp;#125;&amp;#125;  编译后产生outer.class和outer$inner.class   方法内部类  123456789class outer&amp;#123;    public void doSomething()&amp;#123;        class i">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://www.junqson.xin/2017/10/26/C-指针辨析/"/>
+  <link rel="canonical" href="http://www.junqson.xin/2017/12/10/java内部类总结/"/>
 
 
 
 
 
-  <title>C++指针辨析 | Junqson</title>
+  <title>java内部类总结 | Junqson</title>
   
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2017/10/26/C-指针辨析/">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2017/12/10/java内部类总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Junqson">
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">C++指针辨析</h1>
+          <h1 class="post-title" itemprop="name headline">java内部类总结</h1>
         
 
         <div class="post-meta">
@@ -314,8 +314,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T23:49:40+08:00">
-                2017-10-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-10T10:29:17+08:00">
+                2017-12-10
               </time>
             
 
@@ -337,8 +337,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/辨析/" itemprop="url" rel="index">
-                    <span itemprop="name">辨析</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
 
@@ -374,10 +374,66 @@
       
 
       
-        <a id="more"></a>
-<h1 id="C-指针辨析"><a href="#C-指针辨析" class="headerlink" title="C++指针辨析"></a>C++指针辨析</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">#include &lt;iostream&gt;</div><div class="line">using namespace std;</div><div class="line">int main()</div><div class="line">&#123;</div><div class="line">   </div><div class="line"></div><div class="line">    int a1[2];</div><div class="line">    int a2[2];</div><div class="line">    int a3[2];</div><div class="line">    </div><div class="line">    int *p;</div><div class="line">    p=&amp;a1[0];      //a[1]与*(p+1)等价。</div><div class="line">    </div><div class="line">    //pp1是一个指向int [2]的指针，即pp1的类型和&amp;a1是一样的。 a指向的内存长度固定。</div><div class="line">    int pp1[2][2]=&#123;&#123;1,2&#125;,&#123;1,2&#125;&#125;;</div><div class="line">     //pp2是一个指向int *的指针，即pp2的类型和&amp;pp1是一样的。pp指向的内存长度不固定。                </div><div class="line">    int *pp2[3]=&#123;a1,a2,a3&#125;;</div><div class="line">     //pp3是一个指向int [2]的指针，即pp2的类型和&amp;a1是一样的；</div><div class="line">    int (*pp3)[2]=&amp;a1;</div><div class="line">     //pp4是一个指向int *的指针，即pp4的类型和&amp;pp1是一样的；       </div><div class="line">    int **pp4;</div><div class="line">              </div><div class="line">     //可以，类型匹配。         </div><div class="line">    pp1=pp3;</div><div class="line">    pp2=pp4;</div><div class="line">    </div><div class="line">    //不可以。编译错误，无法从int (*)[2]转换为int **！               </div><div class="line">    pp1=pp4;</div><div class="line">    pp2=pp3;</div><div class="line"></div><div class="line">    int (*ps)[2]=&amp;a3;</div><div class="line">    a3[1]=10; </div><div class="line">    cout&lt;&lt;ps[0][1];</div><div class="line">    cout&lt;&lt;*(*ps+1);</div><div class="line">    //*(*ps+1)=ps[0][1]=*(*(ps+0)+1)=a3[1];</div><div class="line">   </div><div class="line"></div><div class="line"></div><div class="line">    return 0;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<hr>
-<h6 id="第一次修改：2016-12-31-0-04"><a href="#第一次修改：2016-12-31-0-04" class="headerlink" title="第一次修改：2016-12-31 0:04"></a>第一次修改：2016-12-31 0:04</h6><h6 id="第二次修改：2017-1-4-22-07"><a href="#第二次修改：2017-1-4-22-07" class="headerlink" title="第二次修改：2017/1/4 22:07"></a>第二次修改：2017/1/4 22:07</h6>
+        <h4 id="内部类"><a href="#内部类" class="headerlink" title="内部类"></a>内部类</h4><ol>
+<li><h5 id="成员内部类"><a href="#成员内部类" class="headerlink" title="成员内部类"></a>成员内部类</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">class Outer&#123;</div><div class="line">    class inner&#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>编译后产生outer.class和outer$inner.class</li>
+</ul>
+<ol>
+<li><h5 id="方法内部类"><a href="#方法内部类" class="headerlink" title="方法内部类"></a>方法内部类</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">class outer&#123;</div><div class="line">    public void doSomething()&#123;</div><div class="line">        class inner&#123;</div><div class="line">            public void seeOuter()&#123;</div><div class="line">                </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>方法内部类只能由该方法实例化</li>
+<li>方法内部类对象无法使用方法内非final变量</li>
+<li>因为方法的局部变量位于栈上，只存在于该方法的生命期内。当一个方法结束，其栈结构被删除，局部变量成为历史。但是该方法结束之后，在方法内创建的内部类对象可能仍然存在于堆中！例如，如果对它的引用被传递到其他某些代码，并存储在一个成员变量内。正因为不能保证局部变量的存活期和方法内部类对象的一样长，所以内部类对象不能使用它们。</li>
+</ul>
+<ol>
+<li><h5 id="静态嵌套类"><a href="#静态嵌套类" class="headerlink" title="静态嵌套类"></a>静态嵌套类</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">class outer&#123;</div><div class="line">    static class inner&#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    class test&#123;</div><div class="line">        public static void main(String[] args)&#123;</div><div class="line">            Outer.inner obj = Outer.new inner();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>可类比静态域</li>
+<li>静态内部类中可以定义静态或者非静态的成员。<br>从技术上讲，静态嵌套类不属于内部类。因为内部类与外部类共享一种特殊关系，更确切地说是对实例的共享关系。而静态嵌套类则没有上述关系。它只是位置在另一个类的内部，因此也被称为顶级嵌套类。<br>静态的含义是该内部类可以像其他静态成员一样，没有外部类对象时，也能够访问它。静态嵌套类仅能访问外部类的静态成员和方法。</li>
+<li>在静态方法中定义的内部类也是StaticNested Class，这时候不能在类前面加static关键字，静态方法中的StaticNested Class与普通方法中的内部类的应用方式很相似，它除了可以直接访问外部类中的static的成员变量，还可以访问静态方法中的局部变量，但是，该局部变量前必须加final修饰符。</li>
+</ul>
+<ol>
+<li><h5 id="匿名内部类"><a href="#匿名内部类" class="headerlink" title="匿名内部类"></a>匿名内部类</h5></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">new ParentName()&#123;</div><div class="line">    //内部类的定义</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>使用情景</li>
+</ul>
+<ol>
+<li>只用到类的一个实例</li>
+<li>类在定义后马上用到</li>
+<li>类非常小</li>
+<li>不会对可读性影响太大</li>
+</ol>
+<ul>
+<li>注意</li>
+</ul>
+<ol>
+<li><p>不能有构造方法</p>
+</li>
+<li><p>不能定义任何静态成员、静态方法<br><br>理由：匿名内部类是晚于外部类加载的，但是匿名内部类和其对象几乎是同时加载的，但是还是早于对象加载，而静态内容是属于类的，当类加载的时候就开始加载，所以当匿名内部类中有静态内容，就会随着类加载，而这时和对象创建冲突。</p>
+</li>
+<li><p>不能是public protected private static</p>
+</li>
+<li><p>只能创建一个实例</p>
+</li>
+<li><p>跟在new后面，隐含实现一个接口或一个类</p>
+</li>
+</ol>
+<h4 id="为何要使用内部类"><a href="#为何要使用内部类" class="headerlink" title="为何要使用内部类"></a>为何要使用内部类</h4><ul>
+<li><p>典型的情况是，内部类继承自某个类或实现某个接口，内部类的代码操作创建其他外围类的对象。所以你可以认为内部类提供了某种进入其外围类的窗口。使用内部类最吸引人的原因是：</p>
+</li>
+<li><p>每个内部类都能独立地继承自一个（接口的）实现，所以无论外围类是否已经继承了某个（接口的）实现，对于内部类都没有影响。如果没有内部类提供的可以继承多个具体的或抽象的类的能力，一些设计与编程问题就很难解决。从这个角度看，内部类使得多重继承的解决方案变得完整。接口解决了部分问题，而内部类有效地实现了“多重继承”。</p>
+</li>
+</ul>
+
       
     </div>
     
@@ -394,9 +450,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/C/" rel="tag"># C++</a>
-          
-            <a href="/tags/指针/" rel="tag"># 指针</a>
+            <a href="/tags/JavaSE/" rel="tag"># JavaSE</a>
           
         </div>
       
@@ -409,8 +463,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/26/【笔记】equals方法重写、相等性测试和继承/" rel="next" title="【笔记】equals方法重写、相等性测试和继承">
-                <i class="fa fa-chevron-left"></i> 【笔记】equals方法重写、相等性测试和继承
+              <a href="/2017/10/31/一种简单加密算法/" rel="next" title="一种简单加密算法">
+                <i class="fa fa-chevron-left"></i> 一种简单加密算法
               </a>
             
           </div>
@@ -419,8 +473,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/10/27/【笔记】斜杠-forward-salash-与反斜杠-back-salash-在路径应用中的区别/" rel="prev" title="【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别">
-                【笔记】斜杠(forward salash)与反斜杠(back salash)在路径应用中的区别 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/07/25/图片视频转字符画/" rel="prev" title="图片视频转字符画">
+                图片视频转字符画 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -602,7 +656,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-指针辨析"><span class="nav-number">1.</span> <span class="nav-text">C++指针辨析</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#第一次修改：2016-12-31-0-04"><span class="nav-number">1.0.0.0.0.1.</span> <span class="nav-text">第一次修改：2016-12-31 0:04</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#第二次修改：2017-1-4-22-07"><span class="nav-number">1.0.0.0.0.2.</span> <span class="nav-text">第二次修改：2017/1/4 22:07</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#内部类"><span class="nav-number">1.</span> <span class="nav-text">内部类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#成员内部类"><span class="nav-number">1.1.</span> <span class="nav-text">成员内部类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法内部类"><span class="nav-number">1.2.</span> <span class="nav-text">方法内部类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#静态嵌套类"><span class="nav-number">1.3.</span> <span class="nav-text">静态嵌套类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#匿名内部类"><span class="nav-number">1.4.</span> <span class="nav-text">匿名内部类</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#为何要使用内部类"><span class="nav-number">2.</span> <span class="nav-text">为何要使用内部类</span></a></li></ol></div>
             
 
           </div>
