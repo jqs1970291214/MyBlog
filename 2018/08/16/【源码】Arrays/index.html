@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaSE,源码,集合," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="介绍 常量 rangeCheck sort parallelSort equals&amp;amp;deepEquals fill asList binarySearch copyOf  介绍java.util中的工具类，提供数组相关的常用操作，排序、比较、填充、二分查找等功能 based on jdk8 常量12345678910//小于等于这个值时，就使用插入排序。将被废弃private stati">
+<meta name="keywords" content="JavaSE,源码,集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【源码】Arrays">
+<meta property="og:url" content="http://www.junqson.xin/2018/08/16/【源码】Arrays/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="介绍 常量 rangeCheck sort parallelSort equals&amp;amp;deepEquals fill asList binarySearch copyOf  介绍java.util中的工具类，提供数组相关的常用操作，排序、比较、填充、二分查找等功能 based on jdk8 常量12345678910//小于等于这个值时，就使用插入排序。将被废弃private stati">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-08-16T11:45:00.955Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【源码】Arrays">
+<meta name="twitter:description" content="介绍 常量 rangeCheck sort parallelSort equals&amp;amp;deepEquals fill asList binarySearch copyOf  介绍java.util中的工具类，提供数组相关的常用操作，排序、比较、填充、二分查找等功能 based on jdk8 常量12345678910//小于等于这个值时，就使用插入排序。将被废弃private stati">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2018/08/16/【源码】Arrays/"/>
+
+
+
+
+
+  <title>【源码】Arrays | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2018/08/16/【源码】Arrays/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【源码】Arrays</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T23:49:40+08:00">
+                2018-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="#常量">常量</a></li>
+<li><a href="#rangeCheck">rangeCheck</a></li>
+<li><a href="#sort">sort</a></li>
+<li><a href="#parallelSort">parallelSort</a></li>
+<li><a href="#equals&amp;deepEquals">equals&amp;deepEquals</a></li>
+<li><a href="#fill">fill</a></li>
+<li><a href="#asList">asList</a></li>
+<li><a href="#binarySearch">binarySearch</a></li>
+<li><a href="#copyOf">copyOf</a></li>
+</ul>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>java.util中的工具类，提供数组相关的常用操作，排序、比较、填充、二分查找等功能</p>
+<p>based on jdk8</p>
+<h3 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//小于等于这个值时，就使用插入排序。将被废弃</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> INSERTIONSORT_THRESHOLD = <span class="number">7</span>;</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">并行排序的最小数组长度，数组长度小于这个数则不在划分数组</span></div><div class="line"><span class="comment">数组长度较小会导致排序的任务竞争内存导致效率降低</span></div><div class="line"><span class="comment">*/</span></div><div class="line"> </div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MIN_ARRAY_SORT_GRAN = <span class="number">1</span> &lt;&lt; <span class="number">13</span>;</div></pre></td></tr></table></figure>
+<h3 id="rangeCheck"><a href="#rangeCheck" class="headerlink" title="rangeCheck"></a>rangeCheck</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//私有方法，检查是否越界</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rangeCheck</span><span class="params">(<span class="keyword">int</span> arrayLength, <span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (fromIndex &gt; toIndex) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</div><div class="line">                <span class="string">"fromIndex("</span> + fromIndex + <span class="string">") &gt; toIndex("</span> + toIndex + <span class="string">")"</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (fromIndex &lt; <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ArrayIndexOutOfBoundsException(fromIndex);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (toIndex &gt; arrayLength) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ArrayIndexOutOfBoundsException(toIndex);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><p>对于int[]、byte[]、long[]等基本类型数组的排序，使用DualPivotQuicksort类进行排序，可选范围。</p>
+<p>注意这个类对改动了双轴快排的策略，使用了其他的排序方法,查看其源码可以知道还使用了计数排序、插入排序、归并排序。很多会导致其他版本快排退化到O(n^2)的数据集使用这个类仍能保证O(nlogn)</p>
+<p><a href="https://blog.csdn.net/Holmofy/article/details/71168530" target="_blank" rel="external">单轴快排和双轴快排</a></p>
+<ul>
+<li>快排的思想是分治，方法是递归</li>
+<li>单轴快排只有一个划分点，对点两侧的区间进行递归</li>
+<li>双轴快排有两个划分点，将区间分为三段，效率会高一些</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a)</span> </span>&#123;</div><div class="line">    DualPivotQuicksort.sort(a, <span class="number">0</span>, a.length - <span class="number">1</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span> </span>&#123;</div><div class="line">    rangeCheck(a.length, fromIndex, toIndex);</div><div class="line">    DualPivotQuicksort.sort(a, fromIndex, toIndex - <span class="number">1</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对Object[]、T[]的排序，主要就是legacyMergeSort()这个旧版归并排序和Timsort.sort()这个进行了很多优化的归并排序。也提供范围排序。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(Object[] a)</span> </span>&#123;</div><div class="line">    <span class="comment">//为了兼容性，允许通过系统属性的方式使用旧版归并实现，不过将要废弃了</span></div><div class="line">    <span class="keyword">if</span> (LegacyMergeSort.userRequested)</div><div class="line">        legacyMergeSort(a);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        ComparableTimSort.sort(a, <span class="number">0</span>, a.length, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function"><span class="keyword">void</span> <span class="title">sort</span><span class="params">(T[] a, Comparator&lt;? <span class="keyword">super</span> T&gt; c)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (c == <span class="keyword">null</span>) &#123;</div><div class="line">        sort(a);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span> (LegacyMergeSort.userRequested)</div><div class="line">            legacyMergeSort(a, c);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            TimSort.sort(a, <span class="number">0</span>, a.length, c, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="parallelSort"><a href="#parallelSort" class="headerlink" title="parallelSort"></a>parallelSort</h3><p>对基本类型的并行排序，以int[]为例。提供范围排序<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">这个排序算法是个将数组划分为几个子数组分别排序然后合并的并行排序-合并过程。</span></div><div class="line"><span class="comment">当子数组长度达到最小粒度，或者数组小于设定的最小粒度，</span></div><div class="line"><span class="comment">使用类似Arrays.sort()的方法(DualPivotQuickSort)来进行排序。</span></div><div class="line"><span class="comment">这个算法需要一个不大于原数组大小的额外空间，使用ForkJoin common pool</span></div><div class="line"><span class="comment">ForkJoinPool#commonPool()）来执行并行的排序任务。</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parallelSort</span><span class="params">(<span class="keyword">int</span>[] a)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n = a.length, p, g;</div><div class="line">    <span class="comment">//如果数组长度小于分组的最小粒度或者只有一个执行线程，使用DualPivotQuicksort</span></div><div class="line">    <span class="keyword">if</span> (n &lt;= MIN_ARRAY_SORT_GRAN ||</div><div class="line">        (p = ForkJoinPool.getCommonPoolParallelism()) == <span class="number">1</span>)</div><div class="line">        DualPivotQuicksort.sort(a, <span class="number">0</span>, n - <span class="number">1</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="comment">//g表示粒度，参数4、5、6分别为排序数组开始位置，需要排序的长度和额外空间的开始位置</span></div><div class="line">        <span class="comment">//g = n / (p &lt;&lt; 2)不可小于最小粒度,否则使用最小粒度</span></div><div class="line">        <span class="keyword">new</span> ArraysParallelSortHelpers.FJInt.Sorter</div><div class="line">            (<span class="keyword">null</span>, a, <span class="keyword">new</span> <span class="keyword">int</span>[n], <span class="number">0</span>, n, <span class="number">0</span>,</div><div class="line">             ((g = n / (p &lt;&lt; <span class="number">2</span>)) &lt;= MIN_ARRAY_SORT_GRAN) ?</div><div class="line">             MIN_ARRAY_SORT_GRAN : g).invoke();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parallelSort</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span> </span>&#123;</div><div class="line">    rangeCheck(a.length, fromIndex, toIndex);</div><div class="line">    <span class="keyword">int</span> n = toIndex - fromIndex, p, g;</div><div class="line">    <span class="keyword">if</span> (n &lt;= MIN_ARRAY_SORT_GRAN ||</div><div class="line">        (p = ForkJoinPool.getCommonPoolParallelism()) == <span class="number">1</span>)</div><div class="line">        DualPivotQuicksort.sort(a, fromIndex, toIndex - <span class="number">1</span>, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="keyword">new</span> ArraysParallelSortHelpers.FJInt.Sorter</div><div class="line">            (<span class="keyword">null</span>, a, <span class="keyword">new</span> <span class="keyword">int</span>[n], fromIndex, n, <span class="number">0</span>,</div><div class="line">             ((g = n / (p &lt;&lt; <span class="number">2</span>)) &lt;= MIN_ARRAY_SORT_GRAN) ?</div><div class="line">             MIN_ARRAY_SORT_GRAN : g).invoke();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对Object[]、T[]的排序<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Comparable&lt;? <span class="keyword">super</span> T&gt;&gt; <span class="function"><span class="keyword">void</span> <span class="title">parallelSort</span><span class="params">(T[] a)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n = a.length, p, g;</div><div class="line">    <span class="keyword">if</span> (n &lt;= MIN_ARRAY_SORT_GRAN ||</div><div class="line">        (p = ForkJoinPool.getCommonPoolParallelism()) == <span class="number">1</span>)</div><div class="line">        <span class="comment">//与基本类型不同，这里使用TimSort</span></div><div class="line">        TimSort.sort(a, <span class="number">0</span>, n, NaturalOrder.INSTANCE, <span class="keyword">null</span>, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="comment">//不提供Comparator时，使用Arrays.NaturalOrder自然顺序的Comparator</span></div><div class="line">        <span class="keyword">new</span> ArraysParallelSortHelpers.FJObject.Sorter&lt;T&gt;</div><div class="line">        (<span class="keyword">null</span>, a,</div><div class="line">         (T[])Array.newInstance(a.getClass().getComponentType(), n),</div><div class="line">         <span class="number">0</span>, n, <span class="number">0</span>, ((g = n / (p &lt;&lt; <span class="number">2</span>)) &lt;= MIN_ARRAY_SORT_GRAN) ?</div><div class="line">         MIN_ARRAY_SORT_GRAN : g, NaturalOrder.INSTANCE).invoke();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="equals-amp-deepEquals"><a href="#equals-amp-deepEquals" class="headerlink" title="equals&amp;deepEquals"></a>equals&amp;deepEquals</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span>[] a2)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (a==a2)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    <span class="comment">//存在null，则false</span></div><div class="line">    <span class="keyword">if</span> (a==<span class="keyword">null</span> || a2==<span class="keyword">null</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">int</span> length = a.length;</div><div class="line">    <span class="keyword">if</span> (a2.length != length)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    <span class="comment">//依次比较</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++)</div><div class="line">        <span class="keyword">if</span> (a[i] != a2[i])</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//Object[]的比较   </span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;length; i++) &#123;</div><div class="line">Object o1 = a[i];</div><div class="line">Object o2 = a2[i];</div><div class="line"><span class="keyword">if</span> (!(o1==<span class="keyword">null</span> ? o2==<span class="keyword">null</span> : o1.equals(o2)))</div><div class="line">    <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//深入比较，即比较多维数组。deepHashcode和deepToString也是如此。</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">deepEquals</span><span class="params">(Object[] a1, Object[] a2)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (a1 == a2)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">    <span class="keyword">if</span> (a1 == <span class="keyword">null</span> || a2==<span class="keyword">null</span>)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    <span class="keyword">int</span> length = a1.length;</div><div class="line"></div><div class="line">    <span class="comment">//长度不同直接false</span></div><div class="line">    <span class="keyword">if</span> (a2.length != length)</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">        Object e1 = a1[i];</div><div class="line">        Object e2 = a2[i];</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (e1 == e2)</div><div class="line">            <span class="keyword">continue</span>;</div><div class="line">        <span class="keyword">if</span> (e1 == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line"></div><div class="line">        <span class="comment">//递归比较，记录是否相等</span></div><div class="line">        <span class="keyword">boolean</span> eq = deepEquals0(e1, e2);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (!eq)</div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="fill"><a href="#fill" class="headerlink" title="fill"></a>fill</h3><p>用给定的值填充数组，提供范围操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">fill</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> val)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, len = a.length; i &lt; len; i++)</div><div class="line">        a[i] = val;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对于Object[]的填充，只是填充了同一引用，并未克隆对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">fill</span><span class="params">(Object[] a, Object val)</span> </span>&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>, len = a.length; i &lt; len; i++)</div><div class="line">        a[i] = val;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="asList"><a href="#asList" class="headerlink" title="asList"></a>asList</h3><p>返回固定大小的ArrayList这个Arrays内部类，注意在使用时和java.util.ArrayList的区别。这个方法和Collection.toArray方法充当了数组和集合的桥梁<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SafeVarargs</span></div><div class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"varargs"</span>)</div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; <span class="function">List&lt;T&gt; <span class="title">asList</span><span class="params">(T... a)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ArrayList&lt;&gt;(a);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="binarySearch"><a href="#binarySearch" class="headerlink" title="binarySearch"></a>binarySearch</h3><p>二分查找，显然数组必须是有序的，否则结果不确定了。如果数组里面有多个相同的，不能保证找到哪一个<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">binarySearch</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> key)</span> </span>&#123;</div><div class="line">    <span class="comment">//调用私有方法</span></div><div class="line">    <span class="keyword">return</span> binarySearch0(a, <span class="number">0</span>, a.length, key);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">binarySearch0</span><span class="params">(<span class="keyword">int</span>[] a, <span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex,</span></span></div><div class="line"><span class="function"><span class="params">                                 <span class="keyword">int</span> key)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> low = fromIndex;</div><div class="line">    <span class="keyword">int</span> high = toIndex - <span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">while</span> (low &lt;= high) &#123;</div><div class="line">        <span class="keyword">int</span> mid = (low + high) &gt;&gt;&gt; <span class="number">1</span>;</div><div class="line">        <span class="keyword">int</span> midVal = a[mid];</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (midVal &lt; key)</div><div class="line">            low = mid + <span class="number">1</span>;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (midVal &gt; key)</div><div class="line">            high = mid - <span class="number">1</span>;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="keyword">return</span> mid; <span class="comment">// 找到了</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> -(low + <span class="number">1</span>);  <span class="comment">// 没找着，保证为负</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="copyOf"><a href="#copyOf" class="headerlink" title="copyOf"></a>copyOf</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//给出数组新长度，拷贝到新数组中，使用System.arrayCopy实现，newLenght &gt;= oldLength</span></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">short</span>[] copyOf(<span class="keyword">short</span>[] original, <span class="keyword">int</span> newLength) &#123;</div><div class="line">    <span class="keyword">short</span>[] copy = <span class="keyword">new</span> <span class="keyword">short</span>[newLength];</div><div class="line">    System.arraycopy(original, <span class="number">0</span>, copy, <span class="number">0</span>,</div><div class="line">                     Math.min(original.length, newLength));</div><div class="line">    <span class="keyword">return</span> copy;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaSE/" rel="tag"># JavaSE</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/25/图片视频转字符画/" rel="next" title="图片视频转字符画">
+                <i class="fa fa-chevron-left"></i> 图片视频转字符画
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODMzNy8xNDg2NQ=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.junqson.xin" title="Title" target="_blank">Title</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常量"><span class="nav-number">2.</span> <span class="nav-text">常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rangeCheck"><span class="nav-number">3.</span> <span class="nav-text">rangeCheck</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort"><span class="nav-number">4.</span> <span class="nav-text">sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#parallelSort"><span class="nav-number">5.</span> <span class="nav-text">parallelSort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#equals-amp-deepEquals"><span class="nav-number">6.</span> <span class="nav-text">equals&deepEquals</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fill"><span class="nav-number">7.</span> <span class="nav-text">fill</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#asList"><span class="nav-number">8.</span> <span class="nav-text">asList</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binarySearch"><span class="nav-number">9.</span> <span class="nav-text">binarySearch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copyOf"><span class="nav-number">10.</span> <span class="nav-text">copyOf</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
