@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaSE,源码,集合," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="介绍 const&amp;amp;field 构造 valueOf get set expandTo&amp;amp;ensureCapacity flip nextSetBit&amp;amp;nextClearBit and&amp;amp;or&amp;amp;xor 长度和容量  介绍 可以看做操作位的Vector，容量可以动态变化。 实现了Cloneable和Serializable接口。 里面的位默认都是false。 一个">
+<meta name="keywords" content="JavaSE,源码,集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【源码】BitSet">
+<meta property="og:url" content="http://www.junqson.xin/2018/09/09/【源码】BitSet/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="介绍 const&amp;amp;field 构造 valueOf get set expandTo&amp;amp;ensureCapacity flip nextSetBit&amp;amp;nextClearBit and&amp;amp;or&amp;amp;xor 长度和容量  介绍 可以看做操作位的Vector，容量可以动态变化。 实现了Cloneable和Serializable接口。 里面的位默认都是false。 一个">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-09T13:00:04.933Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【源码】BitSet">
+<meta name="twitter:description" content="介绍 const&amp;amp;field 构造 valueOf get set expandTo&amp;amp;ensureCapacity flip nextSetBit&amp;amp;nextClearBit and&amp;amp;or&amp;amp;xor 长度和容量  介绍 可以看做操作位的Vector，容量可以动态变化。 实现了Cloneable和Serializable接口。 里面的位默认都是false。 一个">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2018/09/09/【源码】BitSet/"/>
+
+
+
+
+
+  <title>【源码】BitSet | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2018/09/09/【源码】BitSet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【源码】BitSet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-09T20:59:40+08:00">
+                2018-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="constfield">const&amp;field</a></li>
+<li><a href="#构造">构造</a></li>
+<li><a href="valueof">valueOf</a></li>
+<li><a href="#get">get</a></li>
+<li><a href="#set">set</a></li>
+<li><a href="#expandtoensurecapacity">expandTo&amp;ensureCapacity</a></li>
+<li><a href="#flip">flip</a></li>
+<li><a href="#nextSetBitnextClearBit">nextSetBit&amp;nextClearBit</a></li>
+<li><a href="#andorxor">and&amp;or&amp;xor</a></li>
+<li><a href="#长度和容量">长度和容量</a></li>
+</ul>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><ul>
+<li>可以看做操作位的Vector，容量可以动态变化。</li>
+<li>实现了Cloneable和Serializable接口。</li>
+<li>里面的位默认都是false。</li>
+<li>一个BitSet可以通过逻辑AND、OR、XOR修改其他BitSet的内容</li>
+<li>java.util下的，实际上不属于集合框架，但是和List比较像</li>
+<li>线程不安全</li>
+</ul>
+<h3 id="const-amp-field"><a href="#const-amp-field" class="headerlink" title="const&amp;field"></a>const&amp;field</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> ADDRESS_BITS_PER_WORD = <span class="number">6</span>;</div><div class="line"></div><div class="line"><span class="comment">// 每个word的bit数 = 2^6 = 64个位，对应8字节的long类型</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> BITS_PER_WORD = <span class="number">1</span> &lt;&lt;</div><div class="line">ADDRESS_BITS_PER_WORD;</div><div class="line"></div><div class="line"><span class="comment">// 掩码，BIT_PER_WORD - 1 每一个有效位都是1</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> BIT_INDEX_MASK = BITS_PER_WORD - <span class="number">1</span>;</div><div class="line"></div><div class="line"><span class="comment">// long类型的掩码 16^16</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> WORD_MASK = <span class="number">0xffffffffffffffffL</span>;</div><div class="line"></div><div class="line"><span class="comment">// 内部存储"bit"的空间</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">long</span>[] words;</div><div class="line"></div><div class="line"><span class="comment">// word数</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">int</span> wordsInUse = <span class="number">0</span>;</div><div class="line"></div><div class="line"><span class="comment">// words的size是否由用户指定</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">boolean</span> sizeIsSticky = <span class="keyword">false</span>;</div></pre></td></tr></table></figure>
+<h3 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 默认</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">BitSet</span><span class="params">()</span> </span>&#123;</div><div class="line">    initWords(BITS_PER_WORD);</div><div class="line">    sizeIsSticky = <span class="keyword">false</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"> <span class="comment">// nbits为至少要存的位的个数</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">BitSet</span><span class="params">(<span class="keyword">int</span> nbits)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (nbits &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NegativeArraySizeException(<span class="string">"nbits &lt; 0: "</span> + nbits);</div><div class="line"></div><div class="line">    initWords(nbits);</div><div class="line">    sizeIsSticky = <span class="keyword">true</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 给定内部的words数组，最后一个word不能是0</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">BitSet</span><span class="params">(<span class="keyword">long</span>[] words)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>.words = words;</div><div class="line">    <span class="keyword">this</span>.wordsInUse = words.length;</div><div class="line">    checkInvariants();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>举例：</p>
+<ul>
+<li>1个long有 1 &lt;&lt; 6 个位</li>
+<li>给定 nbits = 127，(127 - 1) &gt;&gt; 6 = 1，那么要填满1个long，2个long肯定没问题</li>
+<li>给定 nbits = 129，(129 - 1) &gt;&gt; 6 = 2，至少要填满2个long，3个long肯定没问题 </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 开辟一块内存至少要存下nbits个位</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initWords</span><span class="params">(<span class="keyword">int</span> nbits)</span> </span>&#123;</div><div class="line">    words = <span class="keyword">new</span> <span class="keyword">long</span>[wordIndex(nbits-<span class="number">1</span>) + <span class="number">1</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 计算需要填满几个long</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">wordIndex</span><span class="params">(<span class="keyword">int</span> bitIndex)</span> </span>&#123;  </div><div class="line">    <span class="keyword">return</span> bitIndex &gt;&gt; ADDRESS_BITS_PER_WORD;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="valueOf-NaN"><a href="#valueOf-NaN" class="headerlink" title="valueOf"></a>valueOf</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 给定数据，构造返回一个BitSet</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BitSet <span class="title">valueOf</span><span class="params">(<span class="keyword">long</span>[] longs)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BitSet <span class="title">valueOf</span><span class="params">(LongBuffer lb)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BitSet <span class="title">valueOf</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span></span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BitSet <span class="title">valueOf</span><span class="params">(ByteBuffer bb)</span></span>;</div></pre></td></tr></table></figure>
+<h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">get</span><span class="params">(<span class="keyword">int</span> bitIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (bitIndex &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"bitIndex &lt; 0: "</span> + bitIndex);</div><div class="line">    checkInvariants();</div><div class="line">    <span class="comment">// 定位</span></div><div class="line">    <span class="keyword">int</span> wordIndex = wordIndex(bitIndex);</div><div class="line">    <span class="comment">// 使用与操作判断</span></div><div class="line">    <span class="keyword">return</span> (wordIndex &lt; wordsInUse)</div><div class="line">        &amp;&amp; ((words[wordIndex] &amp; (<span class="number">1L</span> &lt;&lt; bitIndex)) != <span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><p>set用于设置给定位置的位，默认设置为true，也可以指定。<br>支持范围fromIndex到toIndex。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> bitIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (bitIndex &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"bitIndex &lt; 0: "</span> + bitIndex);</div><div class="line">    <span class="comment">// 定位到long[]中的位置</span></div><div class="line">    <span class="keyword">int</span> wordIndex = wordIndex(bitIndex);</div><div class="line">    <span class="comment">// 扩容操作</span></div><div class="line">    expandTo(wordIndex);</div><div class="line">    <span class="comment">// 不管是不是1，结果都是1</span></div><div class="line">    words[wordIndex] |= (<span class="number">1L</span> &lt;&lt; bitIndex); </div><div class="line">    checkInvariants();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> bitIndex, <span class="keyword">boolean</span> value)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (value)</div><div class="line">        set(bitIndex);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        <span class="comment">// 设为0</span></div><div class="line">        clear(bitIndex);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 范围操作</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">set</span><span class="params">(<span class="keyword">int</span> fromIndex, <span class="keyword">int</span> toIndex)</span> </span>&#123;</div><div class="line">    checkRange(fromIndex, toIndex);</div><div class="line">    <span class="comment">// 直接退出</span></div><div class="line">    <span class="keyword">if</span> (fromIndex == toIndex)</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">        </div><div class="line">    <span class="comment">// 定位</span></div><div class="line">    <span class="keyword">int</span> startWordIndex = wordIndex(fromIndex);</div><div class="line">    <span class="keyword">int</span> endWordIndex   = wordIndex(toIndex - <span class="number">1</span>);</div><div class="line">    <span class="comment">// 保证容量</span></div><div class="line">    expandTo(endWordIndex);</div><div class="line">    <span class="comment">// 计算掩码</span></div><div class="line">    <span class="keyword">long</span> firstWordMask = WORD_MASK &lt;&lt; fromIndex;</div><div class="line">    <span class="keyword">long</span> lastWordMask  = WORD_MASK &gt;&gt;&gt; -toIndex;</div><div class="line">    <span class="comment">// 都在同一个word范围内</span></div><div class="line">    <span class="keyword">if</span> (startWordIndex == endWordIndex) &#123;</div><div class="line">        <span class="comment">// 两个掩码与运算，然后或运算</span></div><div class="line">        words[startWordIndex] |= (firstWordMask &amp; lastWordMask);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">// 否则 两端对掩码进行或操作，中间置为1</span></div><div class="line">        </div><div class="line">        <span class="comment">// 开始</span></div><div class="line">        words[startWordIndex] |= firstWordMask;</div><div class="line"></div><div class="line">        <span class="comment">// 中间全设为1</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = startWordIndex+<span class="number">1</span>; i &lt; endWordIndex; i++)</div><div class="line">            words[i] = WORD_MASK;</div><div class="line">        </div><div class="line">        <span class="comment">// 结束</span></div><div class="line">        words[endWordIndex] |= lastWordMask;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    checkInvariants();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="expandTo-amp-ensureCapacity"><a href="#expandTo-amp-ensureCapacity" class="headerlink" title="expandTo&amp;ensureCapacity"></a>expandTo&amp;ensureCapacity</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 扩容</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">expandTo</span><span class="params">(<span class="keyword">int</span> wordIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> wordsRequired = wordIndex+<span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (wordsInUse &lt; wordsRequired) &#123;</div><div class="line">        ensureCapacity(wordsRequired);</div><div class="line">        wordsInUse = wordsRequired;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 保证空间够用</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureCapacity</span><span class="params">(<span class="keyword">int</span> wordsRequired)</span> </span>&#123;</div><div class="line">    <span class="comment">// 小于实际所需</span></div><div class="line">    <span class="keyword">if</span> (words.length &lt; wordsRequired) &#123;</div><div class="line">        <span class="comment">// 2倍扩容或扩容到实际长度，两者取其大</span></div><div class="line">        <span class="keyword">int</span> request = Math.max(<span class="number">2</span> * words.length, wordsRequired);</div><div class="line">        words = Arrays.copyOf(words, request);</div><div class="line">        sizeIsSticky = <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="flip"><a href="#flip" class="headerlink" title="flip"></a>flip</h3><p>反转该位，1设为0，0设为1，借用xor运算</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">flip</span><span class="params">(<span class="keyword">int</span> bitIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (bitIndex &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"bitIndex &lt; 0: "</span> + bitIndex);</div><div class="line"></div><div class="line">    <span class="keyword">int</span> wordIndex = wordIndex(bitIndex);</div><div class="line">    expandTo(wordIndex);</div><div class="line">    </div><div class="line">    words[wordIndex] ^= (<span class="number">1L</span> &lt;&lt; bitIndex);</div><div class="line"></div><div class="line">    recalculateWordsInUse();</div><div class="line">    checkInvariants();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="nextSetBit-amp-nextClearBit"><a href="#nextSetBit-amp-nextClearBit" class="headerlink" title="nextSetBit&amp;nextClearBit"></a>nextSetBit&amp;nextClearBit</h3><p>这两个方法分别用于找给定索引位置之后的下一个1(Set)或者0(Clear), 这里只贴一个nextSetBit</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">nextSetBit</span><span class="params">(<span class="keyword">int</span> fromIndex)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (fromIndex &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IndexOutOfBoundsException(<span class="string">"fromIndex &lt; 0: "</span> + fromIndex);</div><div class="line"></div><div class="line">    checkInvariants();</div><div class="line"></div><div class="line">    <span class="keyword">int</span> u = wordIndex(fromIndex);</div><div class="line">    <span class="comment">// 超出范围肯定没有了</span></div><div class="line">    <span class="keyword">if</span> (u &gt;= wordsInUse)</div><div class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line"></div><div class="line">    <span class="keyword">long</span> word = words[u] &amp; (WORD_MASK &lt;&lt; fromIndex);</div><div class="line">    <span class="comment">// 依次寻找</span></div><div class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</div><div class="line">        <span class="keyword">if</span> (word != <span class="number">0</span>)</div><div class="line">            <span class="comment">//带上前面的</span></div><div class="line">            <span class="keyword">return</span> (u * BITS_PER_WORD) + Long.numberOfTrailingZeros(word);</div><div class="line">        <span class="keyword">if</span> (++u == wordsInUse)</div><div class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">        word = words[u];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="and-amp-or-amp-xor"><a href="#and-amp-or-amp-xor" class="headerlink" title="and&amp;or&amp;xor"></a>and&amp;or&amp;xor</h3><p>and、or、xor的实现类似，只贴一个and。操作的结果放在本对象里。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">and</span><span class="params">(BitSet set)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">this</span> == set)</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    </div><div class="line">    <span class="comment">// 多出来的都设成0</span></div><div class="line">    <span class="keyword">while</span> (wordsInUse &gt; set.wordsInUse)</div><div class="line">        words[--wordsInUse] = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="comment">// 依次and操作</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; wordsInUse; i++)</div><div class="line">        words[i] &amp;= set.words[i];</div><div class="line">    </div><div class="line">    <span class="comment">// 重新计算wordsInUse</span></div><div class="line">    recalculateWordsInUse();</div><div class="line">    checkInvariants();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="长度和容量"><a href="#长度和容量" class="headerlink" title="长度和容量"></a>长度和容量</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">size</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">// 所以说这里返回的所占的空间能存储的bit位数，BITS_PER_WORD的倍数</span></div><div class="line">    <span class="keyword">return</span> words.length * BITS_PER_WORD;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">length</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (wordsInUse == <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    <span class="comment">// 返回实际有效的，减去后面的0位</span></div><div class="line">    <span class="keyword">return</span> BITS_PER_WORD * (wordsInUse - <span class="number">1</span>) +</div><div class="line">        (BITS_PER_WORD - Long.numberOfLeadingZeros(words[wordsInUse - <span class="number">1</span>]));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 返回1的个数</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">cardinality</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; wordsInUse; i++)</div><div class="line">        sum += Long.bitCount(words[i]);</div><div class="line">    <span class="keyword">return</span> sum;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaSE/" rel="tag"># JavaSE</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/08/【源码】EnumMap/" rel="next" title="【源码】EnumMap">
+                <i class="fa fa-chevron-left"></i> 【源码】EnumMap
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODMzNy8xNDg2NQ=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#const-amp-field"><span class="nav-number">2.</span> <span class="nav-text">const&field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造"><span class="nav-number">3.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#valueOf-NaN"><span class="nav-number">4.</span> <span class="nav-text">valueOf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">5.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">6.</span> <span class="nav-text">set</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expandTo-amp-ensureCapacity"><span class="nav-number">7.</span> <span class="nav-text">expandTo&ensureCapacity</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flip"><span class="nav-number">8.</span> <span class="nav-text">flip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nextSetBit-amp-nextClearBit"><span class="nav-number">9.</span> <span class="nav-text">nextSetBit&nextClearBit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#and-amp-or-amp-xor"><span class="nav-number">10.</span> <span class="nav-text">and&or&xor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#长度和容量"><span class="nav-number">11.</span> <span class="nav-text">长度和容量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
