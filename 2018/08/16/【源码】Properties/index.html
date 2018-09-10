@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="JavaSE,源码,集合," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="介绍 常量&amp;amp;变量 load store getProperty setProperty list  介绍Properties类抽象了一个持久的属性集，可以被存储到一个流中或从一个流中加载。Properties里面的key和value都是String类型。Properites继承自HashTable，但是要避免使用put和putAll方法，防止放入非String类型的数据，应该使用setP">
+<meta name="keywords" content="JavaSE,源码,集合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【源码】Properties">
+<meta property="og:url" content="http://www.junqson.xin/2018/08/16/【源码】Properties/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="介绍 常量&amp;amp;变量 load store getProperty setProperty list  介绍Properties类抽象了一个持久的属性集，可以被存储到一个流中或从一个流中加载。Properties里面的key和value都是String类型。Properites继承自HashTable，但是要避免使用put和putAll方法，防止放入非String类型的数据，应该使用setP">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-09-10T10:56:13.987Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【源码】Properties">
+<meta name="twitter:description" content="介绍 常量&amp;amp;变量 load store getProperty setProperty list  介绍Properties类抽象了一个持久的属性集，可以被存储到一个流中或从一个流中加载。Properties里面的key和value都是String类型。Properites继承自HashTable，但是要避免使用put和putAll方法，防止放入非String类型的数据，应该使用setP">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2018/08/16/【源码】Properties/"/>
+
+
+
+
+
+  <title>【源码】Properties | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2018/08/16/【源码】Properties/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【源码】Properties</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-16T23:49:40+08:00">
+                2018-08-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="#常量变量">常量&amp;变量</a></li>
+<li><a href="#load">load</a></li>
+<li><a href="#store">store</a></li>
+<li><a href="#getproperty">getProperty</a></li>
+<li><a href="#setproperty">setProperty</a></li>
+<li><a href="#list">list</a></li>
+</ul>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Properties类抽象了一个持久的属性集，可以被存储到一个流中或从一个流中加载。Properties里面的key和value都是String类型。Properites继承自HashTable，但是要避免使用put和putAll方法，防止放入非String类型的数据，应该使用setProperty方法</p>
+<p>一个属性集可以包含另一个属性集作为他的默认属性，当一个属性键在原始的Properties中找不着时，才会搜索这个默认属性集。</p>
+<p>Properties还支持对xml的读取和存储。</p>
+<h3 id="常量-amp-变量"><a href="#常量-amp-变量" class="headerlink" title="常量&amp;变量"></a>常量&amp;变量</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 默认属性集</span></div><div class="line"><span class="keyword">protected</span> Properties defaults;</div><div class="line"></div><div class="line"><span class="comment">//十六进制数常量</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">char</span>[] hexDigit = &#123;</div><div class="line">    <span class="string">'0'</span>,<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>,<span class="string">'4'</span>,<span class="string">'5'</span>,<span class="string">'6'</span>,<span class="string">'7'</span>,<span class="string">'8'</span>,<span class="string">'9'</span>,<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>,<span class="string">'D'</span>,<span class="string">'E'</span>,<span class="string">'F'</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="load"><a href="#load" class="headerlink" title="load"></a>load</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//将流封装成Properties.LineReader，然后用load0读取properties，LineReader是面向行读取的Reder</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">load</span><span class="params">(Reader reader)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    load0(<span class="keyword">new</span> LineReader(reader));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">load</span><span class="params">(InputStream inStream)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    load0(<span class="keyword">new</span> LineReader(inStream));</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">行分为自然行和逻辑行。自然行被定义为以("\n","\r","\r\n"，eof)任一结尾的字符行。</span></div><div class="line"><span class="comment">自然行也可以是空行，注释行(#,!作为第一个非空白字符的行)，或者保存了全部或部分键-元素对的字符行。</span></div><div class="line"><span class="comment">逻辑行保存了所有键-元素对的数据，可能分散在多个相邻的自然行中，用反斜杠字符 \ 转义行结束符序列。</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">key和value中间的分隔符可以是":"、"="，" "，分隔符左右两侧的空格会被删掉，key前的空格也会被去掉</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">load0</span><span class="params">(LineReader lr)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">    <span class="keyword">char</span>[] convtBuf = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">1024</span>];</div><div class="line">    <span class="keyword">int</span> limit;  <span class="comment">// 字符总数</span></div><div class="line">    <span class="keyword">int</span> keyLen; <span class="comment">// key的长度</span></div><div class="line">    <span class="keyword">int</span> valueStart; <span class="comment">// value的起始位置</span></div><div class="line">    <span class="keyword">char</span> c;</div><div class="line">    <span class="keyword">boolean</span> hasSep;</div><div class="line">    <span class="keyword">boolean</span> precedingBackslash; <span class="comment">// 是否是转义字符</span></div><div class="line"></div><div class="line">    <span class="keyword">while</span> ((limit = lr.readLine()) &gt;= <span class="number">0</span>) &#123;</div><div class="line">        c = <span class="number">0</span>;</div><div class="line">        keyLen = <span class="number">0</span>;</div><div class="line">        <span class="comment">// value的起始位置默认为limit</span></div><div class="line">        valueStart = limit;</div><div class="line">        hasSep = <span class="keyword">false</span>;</div><div class="line">        precedingBackslash = <span class="keyword">false</span>;</div><div class="line"></div><div class="line">        <span class="comment">// keyLen &lt; limit</span></div><div class="line">        <span class="keyword">while</span> (keyLen &lt; limit) &#123;</div><div class="line">            c = lr.lineBuf[keyLen];</div><div class="line">            <span class="comment">// 检测到非空格分隔符且前面的字符没有转义</span></div><div class="line">            <span class="keyword">if</span> ((c == <span class="string">'='</span> || c == <span class="string">':'</span>) &amp;&amp; !precedingBackslash) &#123;</div><div class="line">                <span class="comment">//下一个就是value开始的位置</span></div><div class="line">                valueStart = keyLen + <span class="number">1</span>;</div><div class="line">                <span class="comment">// 并且指定，去除空格</span></div><div class="line">                hasSep = <span class="keyword">true</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((c == <span class="string">' '</span> || c == <span class="string">'\t'</span> || c == <span class="string">'\f'</span>) &amp;&amp; !precedingBackslash) &#123;</div><div class="line">                <span class="comment">// 检测到空格分隔符</span></div><div class="line">                valueStart = keyLen + <span class="number">1</span>;</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 检测到'\'，记录</span></div><div class="line">            <span class="keyword">if</span> (c == <span class="string">'\\'</span>) &#123;</div><div class="line">                precedingBackslash = !precedingBackslash;</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                precedingBackslash = <span class="keyword">false</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//前进一位</span></div><div class="line">            keyLen++;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">// valueStart &lt; limit</span></div><div class="line">        <span class="keyword">while</span> (valueStart &lt; limit) </div><div class="line">            c = lr.lineBuf[valueStart];</div><div class="line">            <span class="comment">// 判断是否是空格类字符</span></div><div class="line">            <span class="keyword">if</span> (c != <span class="string">' '</span> &amp;&amp; c != <span class="string">'\t'</span> &amp;&amp; c != <span class="string">'\f'</span>) &#123;</div><div class="line">                <span class="comment">// 不是空格类字符，并且第一次出现非空格分隔符</span></div><div class="line">                <span class="keyword">if</span> (!hasSep &amp;&amp; (c == <span class="string">'='</span> || c == <span class="string">':'</span>)) &#123;</div><div class="line">                    hasSep = <span class="keyword">true</span>;</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            valueStart++;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 读取key和value</span></div><div class="line">        String key = loadConvert(lr.lineBuf, <span class="number">0</span>, keyLen, convtBuf);</div><div class="line">        String value = loadConvert(lr.lineBuf, valueStart, limit - valueStart, convtBuf);</div><div class="line">        <span class="comment">// 放入</span></div><div class="line">        put(key, value);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="store"><a href="#store" class="headerlink" title="store"></a>store</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 存储，给定Writer或OutStreamWriter和comments</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">store</span><span class="params">(Writer writer, String comments)</span></span></div><div class="line"><span class="function">    <span class="keyword">throws</span> IOException</span></div><div class="line"><span class="function"></span>&#123;</div><div class="line">    store0((writer <span class="keyword">instanceof</span> BufferedWriter)?(BufferedWriter)writer</div><div class="line">     : <span class="keyword">new</span> BufferedWriter(writer),comments,<span class="keyword">false</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">store0</span><span class="params">(BufferedWriter bw, String comments, <span class="keyword">boolean</span> escUnicode)</span> <span class="keyword">throws</span> IOException </span>&#123;</div><div class="line">        <span class="keyword">if</span> (comments != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="comment">// 写入注释,用 8859-1存储中文</span></div><div class="line">            writeComments(bw, comments);</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 写入时间</span></div><div class="line">        bw.write(<span class="string">"#"</span> + <span class="keyword">new</span> Date().toString());</div><div class="line">        <span class="comment">//另起一行</span></div><div class="line">        bw.newLine();</div><div class="line">        <span class="comment">// 同步</span></div><div class="line">        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</div><div class="line">            <span class="keyword">for</span> (Enumeration e = keys(); e.hasMoreElements();) &#123;</div><div class="line">                String key = (String) e.nextElement();</div><div class="line">                String val = (String) get(key);</div><div class="line">                <span class="comment">// 对key中的空格转义</span></div><div class="line">                key = saveConvert(key, <span class="keyword">true</span>, escUnicode);</div><div class="line">                <span class="comment">// 不转义value的的空格</span></div><div class="line">                val = saveConvert(val, <span class="keyword">false</span>, escUnicode);</div><div class="line">                <span class="comment">// 写入按照key=value</span></div><div class="line">                bw.write(key + <span class="string">"="</span> + val);</div><div class="line">                bw.newLine();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        bw.flush();</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="getProperty"><a href="#getProperty" class="headerlink" title="getProperty"></a>getProperty</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//获取属性</span></div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getProperty</span><span class="params">(String key)</span> </span>&#123;</div><div class="line">    Object oval = <span class="keyword">super</span>.get(key</div><div class="line">    <span class="comment">//存储的不是字符串就返回null</span></div><div class="line">    String sval = (oval <span class="keyword">instanceof</span> String) ? (String)oval : <span class="keyword">null</span>;</div><div class="line">    <span class="comment">//如果默认属性中存在就返回</span></div><div class="line">    <span class="keyword">return</span> ((sval == <span class="keyword">null</span>) &amp;&amp; (defaults != <span class="keyword">null</span>)) ? defaults.getProperty(key) : sval;</div><div class="line">&#125;</div><div class="line"><span class="comment">//给定默认值</span></div><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getProperty</span><span class="params">(String key, String defaultValue)</span> </span>&#123;</div><div class="line">    String val = getProperty(key);</div><div class="line">    <span class="comment">//默认属性集的优先级要高于给定的默认值</span></div><div class="line">    <span class="keyword">return</span> (val == <span class="keyword">null</span>) ? defaultValue : val;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="setProperty"><a href="#setProperty" class="headerlink" title="setProperty"></a>setProperty</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 同步方法</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> Object <span class="title">setProperty</span><span class="params">(String key, String value)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> put(key, value);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//打印属性集</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">list</span><span class="params">(PrintWriter out)</span></span>;</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">list</span><span class="params">(PrintStream out)</span></span>;</div><div class="line"></div><div class="line"><span class="comment">//exm：直接打印到标准输出流</span></div><div class="line">properties.list(System.out);</div></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaSE/" rel="tag"># JavaSE</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/16/【源码】Arrays/" rel="next" title="【源码】Arrays">
+                <i class="fa fa-chevron-left"></i> 【源码】Arrays
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/20/【源码】ArrayList/" rel="prev" title="【源码】ArrayList">
+                【源码】ArrayList <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODMzNy8xNDg2NQ=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常量-amp-变量"><span class="nav-number">2.</span> <span class="nav-text">常量&变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#load"><span class="nav-number">3.</span> <span class="nav-text">load</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#store"><span class="nav-number">4.</span> <span class="nav-text">store</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getProperty"><span class="nav-number">5.</span> <span class="nav-text">getProperty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setProperty"><span class="nav-number">6.</span> <span class="nav-text">setProperty</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">7.</span> <span class="nav-text">list</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
