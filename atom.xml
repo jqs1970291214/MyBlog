@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.junqson.xin/"/>
-  <updated>2018-09-09T13:00:04.933Z</updated>
+  <updated>2018-09-11T11:57:30.529Z</updated>
   <id>http://www.junqson.xin/</id>
   
   <author>
@@ -14,6 +14,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【源码】TreeSet</title>
+    <link href="http://www.junqson.xin/2018/09/11/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91TreeSet/"/>
+    <id>http://www.junqson.xin/2018/09/11/【源码】TreeSet/</id>
+    <published>2018-09-11T11:57:40.000Z</published>
+    <updated>2018-09-11T11:57:30.529Z</updated>
+    
+    <content type="html"><![CDATA[<ul>
+<li><a href="#介绍">介绍</a></li>
+<li><a href="#constfield">const&amp;field</a></li>
+<li><a href="#constructor">constructor</a></li>
+<li><a href="#addall">addAll</a></li>
+<li><a href="#subsetheadsettailset">subSet、headSet、tailSet</a></li>
+<li><a href="#导航索引方法">导航(索引)方法</a></li>
+</ul>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><ul>
+<li>TreeSet是个有序的Set，继承了 AbstractSet ，实现了NavigableSet, Cloneable, Serializable接口。</li>
+<li>默认自然排序，也可指定Comparator。</li>
+<li>提供了一系列导航方法，查找和指定目标的最匹配项。</li>
+<li>add、remove、contains这些基础操作提供O(logn)的效率。</li>
+<li>非同步，线程不安全。</li>
+<li>size、isEmpty、contains、add、remove、clear都依托内部的NavigableMap<e,object>实例实现</e,object></li>
+</ul>
+<h3 id="const-amp-field"><a href="#const-amp-field" class="headerlink" title="const&amp;field"></a>const&amp;field</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//依托内部的NavigableMap&lt;E,Object&gt;，实际上是TreeMap做内部容器</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> NavigableMap&lt;E,Object&gt; m;</div><div class="line"></div><div class="line"><span class="comment">//填补Map中的value</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object();</div></pre></td></tr></table></figure>
+<h3 id="constructor-NaN"><a href="#constructor-NaN" class="headerlink" title="constructor"></a>constructor</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// 默认构造</span></div><div class="line">TreeSet()</div><div class="line"></div><div class="line"><span class="comment">// 根据collection构造</span></div><div class="line">TreeSet(Collection&lt;? extends E&gt; collection)</div><div class="line"></div><div class="line"><span class="comment">// 指定Comparator的构造</span></div><div class="line">TreeSet(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)</div><div class="line"></div><div class="line"><span class="comment">// 根据SortedSet构造</span></div><div class="line">TreeSet(SortedSet&lt;E&gt; set)</div><div class="line"></div><div class="line"><span class="comment">//根据NavigableMap&lt;E,Object&gt;构造</span></div><div class="line">TreeSet(NavigableMap&lt;E,Object&gt; m)</div></pre></td></tr></table></figure>
+<h3 id="addAll"><a href="#addAll" class="headerlink" title="addAll"></a>addAll</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//加入集合c中全部元素</span></div><div class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">boolean</span> <span class="title">addAll</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">    <span class="comment">// Use linear-time version if applicable</span></div><div class="line">    <span class="keyword">if</span> (m.size()==<span class="number">0</span> &amp;&amp; c.size() &gt; <span class="number">0</span> &amp;&amp;</div><div class="line">        c <span class="keyword">instanceof</span> SortedSet &amp;&amp;</div><div class="line">        m <span class="keyword">instanceof</span> TreeMap) &#123;</div><div class="line">        <span class="comment">//类型转换</span></div><div class="line">        SortedSet&lt;? extends E&gt; set = (SortedSet&lt;? extends E&gt;) c; </div><div class="line">        TreeMap&lt;E,Object&gt; map = (TreeMap&lt;E, Object&gt;) m;</div><div class="line">        Comparator&lt;? <span class="keyword">super</span> E&gt; cc = (Comparator&lt;? <span class="keyword">super</span> E&gt;) set.comparator();</div><div class="line">        Comparator&lt;? <span class="keyword">super</span> E&gt; mc = map.comparator();</div><div class="line">        </div><div class="line">        <span class="comment">//如果cc和mc两个Comparator相等</span></div><div class="line">        <span class="keyword">if</span> (cc==mc || (cc != <span class="keyword">null</span> &amp;&amp; cc.equals(mc))) &#123;</div><div class="line">        <span class="comment">//把Collection中所有元素添加成TreeMap集合的key</span></div><div class="line">            map.addAllForTreeSet(set, PRESENT);</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="subSet、headSet、tailSet"><a href="#subSet、headSet、tailSet" class="headerlink" title="subSet、headSet、tailSet"></a>subSet、headSet、tailSet</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//***通过TreeMap的subMap()实现,inclusive为是否包含边界***</span></div><div class="line"></div><div class="line"><span class="comment">// 返回子Set，从fromElement到toElement。</span></div><div class="line"><span class="function"><span class="keyword">public</span> NavigableSet&lt;E&gt; <span class="title">subSet</span><span class="params">(E fromElement, <span class="keyword">boolean</span> fromInclusive,</span></span></div><div class="line"><span class="function"><span class="params">                              E toElement,   <span class="keyword">boolean</span> toInclusive)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> TreeSet&lt;E&gt;(m.subMap(fromElement, fromInclusive,</div><div class="line">                                   toElement,   toInclusive));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//从头部到toElement，inclusive为是否包含toElement</span></div><div class="line"><span class="function"><span class="keyword">public</span> NavigableSet&lt;E&gt; <span class="title">headSet</span><span class="params">(E toElement, <span class="keyword">boolean</span> inclusive)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> TreeSet&lt;E&gt;(m.headMap(toElement, inclusive));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//从fromElement到结尾。</span></div><div class="line"><span class="function"><span class="keyword">public</span> NavigableSet&lt;E&gt; <span class="title">tailSet</span><span class="params">(E fromElement, <span class="keyword">boolean</span> inclusive)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> TreeSet&lt;E&gt;(m.tailMap(fromElement, inclusive));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="导航-索引-方法"><a href="#导航-索引-方法" class="headerlink" title="导航(索引)方法"></a>导航(索引)方法</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//小于e的最大元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">lower</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> m.lowerKey(e);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//小于/等于e的最大元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">floor</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> m.floorKey(e);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//大于/等于e的最小元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">ceiling</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> m.ceilingKey(e);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//中大于e的最小元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> E <span class="title">higher</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> m.higherKey(e);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;#介绍&quot;&gt;介绍&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#constfield&quot;&gt;const&amp;amp;field&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;#constructor&quot;&gt;constructor&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+    
+    </summary>
+    
+      <category term="Java" scheme="http://www.junqson.xin/categories/Java/"/>
+    
+    
+      <category term="JavaSE" scheme="http://www.junqson.xin/tags/JavaSE/"/>
+    
+      <category term="源码" scheme="http://www.junqson.xin/tags/%E6%BA%90%E7%A0%81/"/>
+    
+      <category term="集合" scheme="http://www.junqson.xin/tags/%E9%9B%86%E5%90%88/"/>
+    
+  </entry>
   
   <entry>
     <title>【源码】BitSet</title>
