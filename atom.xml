@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.junqson.xin/"/>
-  <updated>2018-10-09T03:41:04.810Z</updated>
+  <updated>2018-10-22T08:18:34.156Z</updated>
   <id>http://www.junqson.xin/</id>
   
   <author>
@@ -14,6 +14,63 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【辨析】String.intern()分析</title>
+    <link href="http://www.junqson.xin/2018/10/22/%E3%80%90%E8%BE%A8%E6%9E%90%E3%80%91String.intern()%E5%88%86%E6%9E%90/"/>
+    <id>http://www.junqson.xin/2018/10/22/【辨析】String.intern()分析/</id>
+    <published>2018-10-22T08:17:17.000Z</published>
+    <updated>2018-10-22T08:18:34.156Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="关于String-intern"><a href="#关于String-intern" class="headerlink" title="关于String.intern()"></a>关于String.intern()</h3><p>最近在看《深入理解JAVA虚拟机》时，碰到一个String.intern()方法，在看这个方法的过程中，踩了一些坑，今天就整理在这里。</p>
+<p>先看看jdk7官方文档是怎么说的</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"> public String intern()</div><div class="line">Returns a canonical representation for the string object.</div><div class="line">A pool of strings, initially empty, is maintained privately by the class String.</div><div class="line"></div><div class="line">When the intern method is invoked, if the pool already contains a string equal to this String object as determined by the equals(Object) method, then the string from the pool is returned. Otherwise, this String object is added to the pool and a reference to this String object is returned.</div><div class="line"></div><div class="line">It follows that for any two strings s and t, s.intern() == t.intern() is true if and only if s.equals(t) is true.</div><div class="line"></div><div class="line">All literal strings and string-valued constant expressions are interned. String literals are defined in section 3.10.5 of the The Java™ Language Specification.</div><div class="line"></div><div class="line">Returns:</div><div class="line">a string that has the same contents as this string, but is guaranteed to be from a pool of unique strings.</div></pre></td></tr></table></figure>
+<p>大体意思就是如果常量池里面有equal方法为true的，就返回那个对象，否则将这个字符串放入常量池中，并返回。</p>
+<h3 id="jdk6和jdk7对这个方法实现的差异"><a href="#jdk6和jdk7对这个方法实现的差异" class="headerlink" title="jdk6和jdk7对这个方法实现的差异"></a>jdk6和jdk7对这个方法实现的差异</h3><p>先来看看这段代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// sec1</span></div><div class="line">String str1 = <span class="keyword">new</span> StringBuilder(<span class="string">"计算机"</span>).append(<span class="string">"软件"</span>).toString();</div><div class="line">System.out.println(str1.intern() == str1);</div><div class="line"></div><div class="line"><span class="comment">// sec2</span></div><div class="line">String str2 = <span class="keyword">new</span> StringBUilder(<span class="string">"ja"</span>).append(<span class="string">"va"</span>).toString();</div><div class="line">System.out.println(str2.intern() == str2);</div></pre></td></tr></table></figure></p>
+<p>结果<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// jdk6下</span></div><div class="line"></div><div class="line"><span class="keyword">false</span> <span class="comment">// sec1</span></div><div class="line"><span class="keyword">false</span> <span class="comment">// sec2</span></div><div class="line"></div><div class="line"><span class="comment">// jdk7下</span></div><div class="line"></div><div class="line"><span class="keyword">true</span> <span class="comment">// sec1</span></div><div class="line"><span class="keyword">false</span> <span class="comment">// sec2</span></div></pre></td></tr></table></figure></p>
+<p>==<strong>为啥sec1的结果变化了?</strong>==</p>
+<p>==<strong>为啥sec2的结果没有变化？</strong>==</p>
+<p>String.intern()是个native方法，底层由C++实现。jdk6中常量池放在Perm空间中，实际上是一个类似于<strong>HashTable</strong>的结构。在调用intern()方法时，首先检查常量池中有没有eq为true的，如果有直接返回引用，否则<strong>将字符串拷贝到常量池</strong>中再返回其引用。一方面存在Perm空间有限，另一方面当常量池固定长度1009，当其中的字符串越来越多时，性能会急剧下降。</p>
+<p>为了解决这个问题，jdk7及以后的实现中，将字符串常量池放在了<strong>Java堆</strong>中。当调用intern()方法时，有别于jdk6中的实现，不会再将该字符串拷贝到常量池中，而是仅在<strong>常量池记录下字符串首次出现的引用</strong>。这样做有利于复用对象，节省空间。<br>但是相对于jdk6的实现，时间效率稍微低一点。但是考虑到重复对象给gc带来的压力，这种时间上的损耗可以忽略不计。</p>
+<p>所以不难发现，sec1中的代码在jdk6中Str1.intern()返回的实际上是str1在常量池中的拷贝。而jdk7，常量池仅仅记录了str1的引用。结果是不言而喻的。</p>
+<p>sec2的代码为啥都返回false呢，这是因为在java中的关键字都是初始放在常量池中的，在sec2执行之前就已存在所以无论怎么调用intern()，结果都是false。</p>
+<h3 id="字符串字面量和常量池"><a href="#字符串字面量和常量池" class="headerlink" title="字符串字面量和常量池"></a>字符串字面量和常量池</h3><p>考虑以下代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">// sec1</span></div><div class="line">String s = <span class="keyword">new</span> String(<span class="string">"11"</span>);</div><div class="line">s.intern();</div><div class="line">String s2 = <span class="string">"11"</span>;</div><div class="line">System.out.println(s == s2);</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// sec2</span></div><div class="line">String s3 = <span class="keyword">new</span> String(<span class="string">"2"</span>) + <span class="keyword">new</span> String(<span class="string">"2"</span>);</div><div class="line">s3.intern();</div><div class="line">String s4 = <span class="string">"22"</span>;</div><div class="line">System.out.println(s3 == s4);</div></pre></td></tr></table></figure>
+<p>结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// jdk7</div><div class="line">fasle</div><div class="line">true</div></pre></td></tr></table></figure>
+<p><strong>==为何相似的代码会有不同的结果？==</strong></p>
+<p>问题的关键在于</p>
+<blockquote>
+<p>String s = new String(“11”);</p>
+</blockquote>
+<p>我们知道字符串字面量在解析的时候是放在常量池中的，<br>我们在new String(“11”)中的字面量也不例外，所以sec1<br>中的s.intern()实际返回的是自动放到常量池的“11”，也即s2指向的对象，s1是java堆中创建的另一对象，所以结果自然为false。</p>
+<p>而sec2中的第一行相当于</p>
+<blockquote>
+<p>String s3 = new StringBuilder(“2”).append(“2”).toString();</p>
+</blockquote>
+<p>执行完后s3获得”22”,之后将其放入常量池中，str4中所指向的”22”和str3为同一对象。</p>
+<ul>
+<li>仓促之间，必有疏漏，还望指正</li>
+<li>2018.10.22 16:15</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;关于String-intern&quot;&gt;&lt;a href=&quot;#关于String-intern&quot; class=&quot;headerlink&quot; title=&quot;关于String.intern()&quot;&gt;&lt;/a&gt;关于String.intern()&lt;/h3&gt;&lt;p&gt;最近在看《深入理解JAVA虚
+    
+    </summary>
+    
+      <category term="Java" scheme="http://www.junqson.xin/categories/Java/"/>
+    
+    
+      <category term="Java" scheme="http://www.junqson.xin/tags/Java/"/>
+    
+      <category term="JVM" scheme="http://www.junqson.xin/tags/JVM/"/>
+    
+      <category term="API" scheme="http://www.junqson.xin/tags/API/"/>
+    
+  </entry>
   
   <entry>
     <title>【源码】ArrayDeque</title>
