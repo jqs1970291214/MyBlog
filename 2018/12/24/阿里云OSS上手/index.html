@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="OSS,CDN," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="最近班里大家都在紧张刺激的开发和上线项目，因为七牛云cdn域名相关的使用限制，今天结合阿里云oss官方文档来谈一谈如何通过阿里云的oss服务实现图片等小文件的cdn加速。  oss是对象存储，用于存储图片、文件等非结构化数据。  流程先来看一下流程图  我们一般只需要用到前三个步骤，开通OSS服务并创建我们空间之后，我们就可以通过空间提供域名访问到已经上传的文件。 How to start打开阿里">
+<meta name="keywords" content="OSS,CDN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里云OSS快速上手">
+<meta property="og:url" content="http://www.junqson.xin/2018/12/24/阿里云OSS上手/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="最近班里大家都在紧张刺激的开发和上线项目，因为七牛云cdn域名相关的使用限制，今天结合阿里云oss官方文档来谈一谈如何通过阿里云的oss服务实现图片等小文件的cdn加速。  oss是对象存储，用于存储图片、文件等非结构化数据。  流程先来看一下流程图  我们一般只需要用到前三个步骤，开通OSS服务并创建我们空间之后，我们就可以通过空间提供域名访问到已经上传的文件。 How to start打开阿里">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4330/1545268521919_zh-CN.jpg">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/ossstart.png">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/createzone.png">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/bucket.png">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/upload.png">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/imgurl.png">
+<meta property="og:image" content="http://blogzone.oss-cn-beijing.aliyuncs.com/ossfee.jpg">
+<meta property="og:updated_time" content="2018-12-24T11:53:18.744Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="阿里云OSS快速上手">
+<meta name="twitter:description" content="最近班里大家都在紧张刺激的开发和上线项目，因为七牛云cdn域名相关的使用限制，今天结合阿里云oss官方文档来谈一谈如何通过阿里云的oss服务实现图片等小文件的cdn加速。  oss是对象存储，用于存储图片、文件等非结构化数据。  流程先来看一下流程图  我们一般只需要用到前三个步骤，开通OSS服务并创建我们空间之后，我们就可以通过空间提供域名访问到已经上传的文件。 How to start打开阿里">
+<meta name="twitter:image" content="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4330/1545268521919_zh-CN.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2018/12/24/阿里云OSS上手/"/>
+
+
+
+
+
+  <title>阿里云OSS快速上手 | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2018/12/24/阿里云OSS上手/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">阿里云OSS快速上手</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-24T19:50:17+08:00">
+                2018-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/上手/" itemprop="url" rel="index">
+                    <span itemprop="name">上手</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近班里大家都在紧张刺激的开发和上线项目，因为七牛云cdn域名相关的使用限制，今天结合阿里云oss官方文档来谈一谈如何通过阿里云的oss服务实现图片等小文件的cdn加速。</p>
+<blockquote>
+<p>oss是对象存储，用于存储图片、文件等非结构化数据。</p>
+</blockquote>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><p>先来看一下流程图</p>
+<p><img src="http://static-aliyun-doc.oss-cn-hangzhou.aliyuncs.com/assets/img/4330/1545268521919_zh-CN.jpg" alt=""></p>
+<p>我们一般只需要用到前三个步骤，开通OSS服务并创建我们空间之后，我们就可以通过空间提供域名访问到已经上传的文件。</p>
+<h3 id="How-to-start"><a href="#How-to-start" class="headerlink" title="How to start"></a>How to start</h3><p>打开<a href="https://help.aliyun.com/document_detail/31883.html" target="_blank" rel="external">阿里云官方文档</a>，</p>
+<p><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/ossstart.png" alt=""></p>
+<p>依次阅读左侧栏目。如果后端没有图片和文件上传的业务需求，上传文件，下载文件等可以略过。</p>
+<h3 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h3><ul>
+<li><h4 id="创建空间和公共读"><a href="#创建空间和公共读" class="headerlink" title="创建空间和公共读"></a>创建空间和公共读</h4><p>点击控制台左侧对象存储OSS，点击新建bucket，为了保证我们的资源可以公共读取，创建空间的时候，修改读写权限为可公共读<br><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/createzone.png" alt=""></p>
+</li>
+<li><h4 id="我创建的空间域名在哪里"><a href="#我创建的空间域名在哪里" class="headerlink" title="我创建的空间域名在哪里"></a>我创建的空间域名在哪里</h4><p>点击进入新建的bucket，可以看到，这个面板里列出了bucket的基础信息。注意访问域名面板。第二列是地域节点域名，第三列第一行就是外网访问域名，我们主要用的就是这个域名。下面两个是用于我们ECS通过内网访问OSS的。<br><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/bucket.png" alt=""></p>
+</li>
+<li><h4 id="文件上传与管理"><a href="#文件上传与管理" class="headerlink" title="文件上传与管理"></a>文件上传与管理</h4><p>开发时通过控制台上传文件到空间中。<br>打开文件管理，选择上传文件，注意文件要保证可读，这里我们继承bucket的权限。<br><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/upload.png" alt=""></p>
+</li>
+<li><h4 id="如何获取我的文件和图片的url"><a href="#如何获取我的文件和图片的url" class="headerlink" title="如何获取我的文件和图片的url"></a>如何获取我的文件和图片的url</h4><p>url格式: ==bucket域名/文件名==<br>比如下面这张图：(<a href="http://blogzone.oss-cn-beijing.aliyuncs.com/imgurl.png" target="_blank" rel="external">http://blogzone.oss-cn-beijing.aliyuncs.com/imgurl.png</a>)<br><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/imgurl.png" alt=""></p>
+</li>
+<li><h4 id="有通过代码上传文件或图片的需求"><a href="#有通过代码上传文件或图片的需求" class="headerlink" title="有通过代码上传文件或图片的需求"></a>有通过代码上传文件或图片的需求</h4></li>
+</ul>
+<p>阿里云提供java和Python等版本的sdk，不提供js的sdk。前端上传文件到OSS，必须先上传到开发者服务器，由开发者服务器根据业务需求(风控、文件验证、重命名等)上传到OSS。<br>这里给出后端上传的demo:<br><a href="https://github.com/aliyun/aliyun-oss-java-sdk/blob/master/src/samples/SimpleGetObjectSample.java?spm=a2c4g.11186623.2.9.75c839a5MVDvVS&amp;file=SimpleGetObjectSample.java" target="_blank" rel="external">简单上传</a></p>
+<ul>
+<li><h4 id="怎么将我的小程序里面的图片cdn加速？"><a href="#怎么将我的小程序里面的图片cdn加速？" class="headerlink" title="怎么将我的小程序里面的图片cdn加速？"></a>怎么将我的小程序里面的图片cdn加速？</h4></li>
+</ul>
+<p>将图片依次上传到oss，获取图片url，通过img标签的href访问图片。</p>
+<h3 id="计费方式、计费项和计量项"><a href="#计费方式、计费项和计量项" class="headerlink" title="计费方式、计费项和计量项"></a><a href="https://helpcdn.aliyun.com/document_detail/48266.html" target="_blank" rel="external">计费方式</a>、<a href="https://helpcdn.aliyun.com/document_detail/59636.html?spm=a2c4g.11186623.2.12.1d335cdaxGDXio" target="_blank" rel="external">计费项和计量项</a></h3><p>主要按照已用存储量、流量、请求数来按量计费，小需求的OSS服务还是很便宜的，具体的计费信息可以了解一下。<br><img src="http://blogzone.oss-cn-beijing.aliyuncs.com/ossfee.jpg" alt=""></p>
+<hr>
+<p>2018.12.24<br>平安夜快乐！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/OSS/" rel="tag"># OSS</a>
+          
+            <a href="/tags/CDN/" rel="tag"># CDN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/01/【辨析】几种常见的开源协议/" rel="next" title="【总结】几种常见的开源协议">
+                <i class="fa fa-chevron-left"></i> 【总结】几种常见的开源协议
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODMzNy8xNDg2NQ=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ljmx.top" title="ljmx" target="_blank">ljmx</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.stalary.com" title="stalary" target="_blank">stalary</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-to-start"><span class="nav-number">2.</span> <span class="nav-text">How to start</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#要点"><span class="nav-number">3.</span> <span class="nav-text">要点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建空间和公共读"><span class="nav-number">3.1.</span> <span class="nav-text">创建空间和公共读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我创建的空间域名在哪里"><span class="nav-number">3.2.</span> <span class="nav-text">我创建的空间域名在哪里</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件上传与管理"><span class="nav-number">3.3.</span> <span class="nav-text">文件上传与管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如何获取我的文件和图片的url"><span class="nav-number">3.4.</span> <span class="nav-text">如何获取我的文件和图片的url</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有通过代码上传文件或图片的需求"><span class="nav-number">3.5.</span> <span class="nav-text">有通过代码上传文件或图片的需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#怎么将我的小程序里面的图片cdn加速？"><span class="nav-number">3.6.</span> <span class="nav-text">怎么将我的小程序里面的图片cdn加速？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计费方式、计费项和计量项"><span class="nav-number">4.</span> <span class="nav-text">计费方式、计费项和计量项</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
