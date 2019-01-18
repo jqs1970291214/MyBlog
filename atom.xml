@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.junqson.xin/"/>
-  <updated>2018-12-24T11:53:18.744Z</updated>
+  <updated>2019-01-18T12:49:41.581Z</updated>
   <id>http://www.junqson.xin/</id>
   
   <author>
@@ -14,6 +14,61 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【算法】TopN问题</title>
+    <link href="http://www.junqson.xin/2019/01/18/%E3%80%90%E7%AE%97%E6%B3%95%E3%80%91TopN%E9%97%AE%E9%A2%98/"/>
+    <id>http://www.junqson.xin/2019/01/18/【算法】TopN问题/</id>
+    <published>2019-01-18T12:44:40.000Z</published>
+    <updated>2019-01-18T12:49:41.581Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。</p>
+<p>首先是问题描述：</p>
+<blockquote>
+<p>给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个</p>
+</blockquote>
+<p>很容易想到，我们把数据排序一下，然后直接取前n个不就完了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.sort();</div><div class="line"><span class="keyword">return</span> Arrays.copyOf(arr, n);</div></pre></td></tr></table></figure>
+<p>如果是比较快的排序算法，以上时间复杂度为O(klogk)。</p>
+<p>但是我们实际要关注的是我们真正需要的前N个，而不是对所有的数据进行排序，虽然最后得到的结果是有序的。</p>
+<p>如果我们需要更优化的算法，而且不再强调结果的顺序，我们可以用堆(heap)来解决这个问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 算法思想（以取最小的TopN为例）</span></div><div class="line"><span class="comment"> * 将数组的前N个做成大顶堆，顶上元素最大。</span></div><div class="line"><span class="comment"> * 遍历剩下的数组arr[n]...arr[length - 1]</span></div><div class="line"><span class="comment"> * 如果arr[i] &gt;= 顶，pass。</span></div><div class="line"><span class="comment"> * 否则和顶交换，重新调整堆</span></div><div class="line"><span class="comment"> */</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] findLeastTopN(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n) &#123;</div><div class="line">    <span class="keyword">if</span> (arr.length &lt;= n) &#123;</div><div class="line">        <span class="keyword">return</span> arr;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    initHeap(arr, n);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &lt; arr.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[<span class="number">0</span>]) &#123;</div><div class="line">            swap(arr, <span class="number">0</span>, i);</div><div class="line">            adjust(arr, <span class="number">0</span>, n);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> Arrays.copyOf(arr, n);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 初始化堆</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">initHeap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> len)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> lastHasSon = len / <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = lastHasSon; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">        adjust(arr, i, len);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 交换</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> i, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> temp = arr[i];</div><div class="line">    arr[i] = arr[k];</div><div class="line">    arr[k] = temp;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 调整</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">adjust</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> len)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> node = arr[i];</div><div class="line">    <span class="keyword">int</span> l, r;</div><div class="line">    l = r = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (i * <span class="number">2</span> + <span class="number">1</span> &lt; len) &#123;</div><div class="line">        l = arr[i * <span class="number">2</span> + <span class="number">1</span>];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (i * <span class="number">2</span> + <span class="number">2</span> &lt; len) &#123;</div><div class="line">        r = arr[i * <span class="number">2</span> + <span class="number">2</span>];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (node &gt;= r &amp;&amp; node &gt;= l) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (l &gt;= r) &#123;</div><div class="line">        swap(arr, i, i * <span class="number">2</span> + <span class="number">1</span>);</div><div class="line">        adjust(arr, i * <span class="number">2</span> + <span class="number">1</span>, len);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        swap(arr, i, i * <span class="number">2</span> + <span class="number">2</span>);</div><div class="line">        adjust(arr, i * <span class="number">2</span> + <span class="number">2</span>, len);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的算法取前n个作初始堆，然后依次扫描后k - n个，很容易得到，此算法时间复杂度为O(klogn), 显然比上一个算法更优，当n比较小时，复杂度趋近O(n)。</p>
+<p>Java中的PriorityQueue是也是基于heap实现的，这里贴出利用优先级队列的解法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] findLargestTopN(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n) &#123;</div><div class="line">    <span class="keyword">if</span> (n &gt;= arr.length) &#123;</div><div class="line">        <span class="keyword">return</span> arr;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 重新实现一下comparator，保证数字大的优先级高</span></div><div class="line">    PriorityQueue&lt;Integer&gt; pq = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; o2 - o1);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</div><div class="line">        pq.offer(arr[i]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[n];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">        res[i] = pq.poll();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来再介绍另外一种O(klogn)的解法，我们知道在快排中我们选取pivot，然后以pivot为界，将数据划分为大于pivot和小于pivot的两个部分。假如pivot所在的位置为i，虽然两侧数据无序，但是很容易得知，pivot是第i + 1大的元素，pivot的左侧就是最小的i个数，那其实只要按照快排的思路，找到第k大的轴，那么就找到了答案。</p>
+<p>下面贴出找到第K大的数的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">    先找到pivot，据此将区间分为两部分，如果privot的位置恰好是k的话，直接返回</span></div><div class="line"><span class="comment">    否则如果pivot &gt; k，说明第k大的数在pivot左边，反之在右边，继续划分即可。</span></div><div class="line"><span class="comment">    如果区间只有一个了，说明找到了。</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> s, <span class="keyword">int</span> e, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (s == e &amp;&amp; s + <span class="number">1</span> == k) &#123;</div><div class="line">        <span class="keyword">return</span> arr[s];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">int</span> pivot = arr[e];</div><div class="line">    <span class="keyword">int</span> i = s;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = s; j &lt;e; j++) &#123;</div><div class="line">        <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;</div><div class="line">            <span class="keyword">int</span> temp = arr[i];</div><div class="line">            arr[i++] = arr[j];</div><div class="line">            arr[j] = temp;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    arr[e] = arr[i];</div><div class="line">    arr[i] = pivot;</div><div class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> == k) &#123;</div><div class="line">        <span class="keyword">return</span> arr[i];</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i + <span class="number">1</span> &gt; k) &#123;</div><div class="line">        <span class="keyword">return</span> find(arr, s, i - <span class="number">1</span>, k);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> find(arr, i + <span class="number">1</span>, e, k);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再把思路往下延伸一下，放在大数据量环境之下。</p>
+<blockquote>
+<p>有1G的文件，文件中每行一个16字节之内的单词，内存只有16M，要求找出其中出现频率最高的n个，要求顺序。</p>
+</blockquote>
+<p>显然不可能将这些数据全部加载进内存。分治算法是解决此类问题的一个可行方案。</p>
+<p>首先我们将1G文件根据字母序或者哈希算法划分到多个桶（小文件）内，注意要将相同的单词划到同一个桶内，统计桶内单词的词频，生成(单词，频率)对，复杂度O(k)。然后根据TopN算法找出词频前N个另行存储，复杂度O(klogn)。为什么要取前n个呢，极端情况下，词频最高的n个集中在一个桶内。</p>
+<p>最后合并结果，合并的过程可以使用归并排序。</p>
+<hr>
+<p>大佬们见笑了，如有谬误，请在评论区指正，感谢。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。&lt;/p&gt;
+&lt;p&gt;首先是问题描述：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个&lt;/p
+    
+    </summary>
+    
+      <category term="算法" scheme="http://www.junqson.xin/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="http://www.junqson.xin/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="面试题" scheme="http://www.junqson.xin/tags/%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    
+      <category term="Java" scheme="http://www.junqson.xin/tags/Java/"/>
+    
+  </entry>
   
   <entry>
     <title>阿里云OSS快速上手</title>
@@ -1220,47 +1275,6 @@
       <category term="C++" scheme="http://www.junqson.xin/tags/C/"/>
     
       <category term="指针" scheme="http://www.junqson.xin/tags/%E6%8C%87%E9%92%88/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>【笔记】equals方法重写、相等性测试和继承</title>
-    <link href="http://www.junqson.xin/2017/10/26/%E3%80%90%E7%AC%94%E8%AE%B0%E3%80%91equals%E6%96%B9%E6%B3%95%E9%87%8D%E5%86%99%E3%80%81%E7%9B%B8%E7%AD%89%E6%80%A7%E6%B5%8B%E8%AF%95%E5%92%8C%E7%BB%A7%E6%89%BF/"/>
-    <id>http://www.junqson.xin/2017/10/26/【笔记】equals方法重写、相等性测试和继承/</id>
-    <published>2017-10-26T15:05:44.000Z</published>
-    <updated>2018-02-22T10:07:57.756Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="【笔记】equals方法重写、相等性测试和继承"><a href="#【笔记】equals方法重写、相等性测试和继承" class="headerlink" title="【笔记】equals方法重写、相等性测试和继承"></a>【笔记】equals方法重写、相等性测试和继承</h1><h3 id="一、equals方法重写"><a href="#一、equals方法重写" class="headerlink" title="一、equals方法重写"></a>一、equals方法重写</h3><p>Object类中的equals方法用于检测两个对象是否相等，默认操作为检测两个对象是否具有相同的引用。在Object的子类中一般覆盖equals方法（比如String类），多用于检测两个对象的状态是否相等。<br>重写equals方法，一般采取以下步骤：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public booleanequals(Object other)&#123;</div><div class="line">    //如果两个对象具有相同的引用则返回true，这是一条优化</div><div class="line">    if (this==other) return true;</div><div class="line">    //如果other为null，返回false</div><div class="line">    if (other==null) return false;</div><div class="line">    //如果两个对象不属于同一个类，返回false</div><div class="line">    if (getClass()!=other.getClass()) return false;</div><div class="line">    //现在可以确定两个对象属于同一个类，进行类型转换，假设this属于Person类</div><div class="line">    Person oth=(Person)other;</div><div class="line">    //依次判断实例域是否相等</div><div class="line">    return field1.equals(oth.field1)&amp;&amp;(field2==oth.field2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在覆盖equals方法时，必须使方法名和形参列表和父类一致，由方法名和参数列表组成的方法签名在方法重载起到关键作用，意味着以下写法是不允许的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">public boolean equals(Object oth)&#123;&#125;</div><div class="line">public int equals(Object oth)&#123;&#125;</div></pre></td></tr></table></figure>
-<p>我们可以使用@Override来标记被重写的方法，如果方法没有被成功重写，则会给出错误报告，这是一个有效避免错误的小技巧。<br>在判断实例域时，当实例域为对象时应该使用Objects.equals方法，以避免空指针异常，比如上面代码最后一行应改为：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">return Objects.equals(field1,field2)&amp;&amp;(field2==oth.field2);</div></pre></td></tr></table></figure>
-<p>使用该方法需要导入java.util.Objects,如果两个参数都为null，返回true；如果仅有一个为null，返回false，否则调用</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">para1.equals(para2);</div></pre></td></tr></table></figure>
-<p>该方法源码实现摘录如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static boolean equals(Object a,Object b)&#123;</div><div class="line"></div><div class="line">    return (a == b) || (a != null &amp;&amp; a.equal=s(b)); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="二、相等测试和继承"><a href="#二、相等测试和继承" class="headerlink" title="二、相等测试和继承"></a>二、相等测试和继承</h3><p>如果两个参数不属于一个类，问题就会变得复杂。很多人单纯使用instanceof进行测试：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if(!(otherinstanceof thisObj)) return false;</div></pre></td></tr></table></figure></p>
-<p>不过这么做并没有解决other是thisObj子类的对象的问题，而且违反了equals方法的对称性，Java语言规范要求equals方法的对称性：当且仅当x.equals(y);返回true，y.equals(x);也应该返回true。如果son和父类father共同的域相等且子类中重写了equals方法，按照（一）中的方法，faher.equals(son)会返回true，而son.equals(father)则会返回false，这显然是不合适的。<br>为了改进这个问题，写出更完美的equals方法，可以进行以下判断：</p>
-<ul>
-<li>如果相等的概念由父类决定，可以使用instanceof进行检测，这样还有利于检测由父类派生出的多个子类的对象之间的相等性。</li>
-<li>如果相等的概念由子类决定，equals方法的对称性强制使用getClass()进行检测。</li>
-</ul>
-<p>在对代码进行修改时，如果相等的概念由子类决定则（一）中代码保持不变。如果相等的概念由父类决定，那么（一）中在判断完other不为null后的第三步改为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">if(!(otherinstanceof Person)) return false;</div></pre></td></tr></table></figure></p>
-<hr>
-<p>2017.7.31 18:00第一次编辑</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;【笔记】equals方法重写、相等性测试和继承&quot;&gt;&lt;a href=&quot;#【笔记】equals方法重写、相等性测试和继承&quot; class=&quot;headerlink&quot; title=&quot;【笔记】equals方法重写、相等性测试和继承&quot;&gt;&lt;/a&gt;【笔记】equals方法重写、相等
-    
-    </summary>
-    
-      <category term="Java" scheme="http://www.junqson.xin/categories/Java/"/>
-    
-    
-      <category term="JavaSE" scheme="http://www.junqson.xin/tags/JavaSE/"/>
     
   </entry>
   

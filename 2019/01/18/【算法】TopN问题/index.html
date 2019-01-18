@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法,面试题,Java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Junqson" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。 首先是问题描述：  给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个  很容易想到，我们把数据排序一下，然后直接取前n个不就完了。 12arr.sort();return Arrays.copyOf(arr, n); 如果是比较快的排序算法，以上时间复">
+<meta name="keywords" content="算法,面试题,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法】TopN问题">
+<meta property="og:url" content="http://www.junqson.xin/2019/01/18/【算法】TopN问题/index.html">
+<meta property="og:site_name" content="Junqson">
+<meta property="og:description" content="最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。 首先是问题描述：  给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个  很容易想到，我们把数据排序一下，然后直接取前n个不就完了。 12arr.sort();return Arrays.copyOf(arr, n); 如果是比较快的排序算法，以上时间复">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-18T12:49:41.581Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【算法】TopN问题">
+<meta name="twitter:description" content="最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。 首先是问题描述：  给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个  很容易想到，我们把数据排序一下，然后直接取前n个不就完了。 12arr.sort();return Arrays.copyOf(arr, n); 如果是比较快的排序算法，以上时间复">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://www.junqson.xin/2019/01/18/【算法】TopN问题/"/>
+
+
+
+
+
+  <title>【算法】TopN问题 | Junqson</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Junqson</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Fighting For Future</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            主页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            时间轴
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.junqson.xin/2019/01/18/【算法】TopN问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Junqson">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/img/head.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Junqson">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【算法】TopN问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T20:44:40+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近看到了TopN的题和一些常用的场景，发现此类问题还是很有意思的。今天特来整理一下。</p>
+<p>首先是问题描述：</p>
+<blockquote>
+<p>给定一个数组，{3, 1, 8, 7, 4, 5, 2, …}, 数据规模为k, 要求找到最大(小)的前n个</p>
+</blockquote>
+<p>很容易想到，我们把数据排序一下，然后直接取前n个不就完了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">arr.sort();</div><div class="line"><span class="keyword">return</span> Arrays.copyOf(arr, n);</div></pre></td></tr></table></figure>
+<p>如果是比较快的排序算法，以上时间复杂度为O(klogk)。</p>
+<p>但是我们实际要关注的是我们真正需要的前N个，而不是对所有的数据进行排序，虽然最后得到的结果是有序的。</p>
+<p>如果我们需要更优化的算法，而且不再强调结果的顺序，我们可以用堆(heap)来解决这个问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 算法思想（以取最小的TopN为例）</span></div><div class="line"><span class="comment"> * 将数组的前N个做成大顶堆，顶上元素最大。</span></div><div class="line"><span class="comment"> * 遍历剩下的数组arr[n]...arr[length - 1]</span></div><div class="line"><span class="comment"> * 如果arr[i] &gt;= 顶，pass。</span></div><div class="line"><span class="comment"> * 否则和顶交换，重新调整堆</span></div><div class="line"><span class="comment"> */</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] findLeastTopN(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n) &#123;</div><div class="line">    <span class="keyword">if</span> (arr.length &lt;= n) &#123;</div><div class="line">        <span class="keyword">return</span> arr;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    initHeap(arr, n);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n; i &lt; arr.length; i++) &#123;</div><div class="line">        <span class="keyword">if</span> (arr[i] &lt; arr[<span class="number">0</span>]) &#123;</div><div class="line">            swap(arr, <span class="number">0</span>, i);</div><div class="line">            adjust(arr, <span class="number">0</span>, n);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> Arrays.copyOf(arr, n);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 初始化堆</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">initHeap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> len)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> lastHasSon = len / <span class="number">2</span> - <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = lastHasSon; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">        adjust(arr, i, len);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 交换</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> arr[], <span class="keyword">int</span> i, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> temp = arr[i];</div><div class="line">    arr[i] = arr[k];</div><div class="line">    arr[k] = temp;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 调整</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">adjust</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> i, <span class="keyword">int</span> len)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> node = arr[i];</div><div class="line">    <span class="keyword">int</span> l, r;</div><div class="line">    l = r = -<span class="number">1</span>;</div><div class="line">    <span class="keyword">if</span> (i * <span class="number">2</span> + <span class="number">1</span> &lt; len) &#123;</div><div class="line">        l = arr[i * <span class="number">2</span> + <span class="number">1</span>];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (i * <span class="number">2</span> + <span class="number">2</span> &lt; len) &#123;</div><div class="line">        r = arr[i * <span class="number">2</span> + <span class="number">2</span>];</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (node &gt;= r &amp;&amp; node &gt;= l) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (l &gt;= r) &#123;</div><div class="line">        swap(arr, i, i * <span class="number">2</span> + <span class="number">1</span>);</div><div class="line">        adjust(arr, i * <span class="number">2</span> + <span class="number">1</span>, len);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        swap(arr, i, i * <span class="number">2</span> + <span class="number">2</span>);</div><div class="line">        adjust(arr, i * <span class="number">2</span> + <span class="number">2</span>, len);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的算法取前n个作初始堆，然后依次扫描后k - n个，很容易得到，此算法时间复杂度为O(klogn), 显然比上一个算法更优，当n比较小时，复杂度趋近O(n)。</p>
+<p>Java中的PriorityQueue是也是基于heap实现的，这里贴出利用优先级队列的解法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span>[] findLargestTopN(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n) &#123;</div><div class="line">    <span class="keyword">if</span> (n &gt;= arr.length) &#123;</div><div class="line">        <span class="keyword">return</span> arr;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 重新实现一下comparator，保证数字大的优先级高</span></div><div class="line">    PriorityQueue&lt;Integer&gt; pq = <span class="keyword">new</span> PriorityQueue&lt;&gt;((o1, o2) -&gt; o2 - o1);</div><div class="line"></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</div><div class="line">        pq.offer(arr[i]);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">int</span>[] res = <span class="keyword">new</span> <span class="keyword">int</span>[n];</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">        res[i] = pq.poll();</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> res;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接下来再介绍另外一种O(klogn)的解法，我们知道在快排中我们选取pivot，然后以pivot为界，将数据划分为大于pivot和小于pivot的两个部分。假如pivot所在的位置为i，虽然两侧数据无序，但是很容易得知，pivot是第i + 1大的元素，pivot的左侧就是最小的i个数，那其实只要按照快排的思路，找到第k大的轴，那么就找到了答案。</p>
+<p>下面贴出找到第K大的数的代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment">    先找到pivot，据此将区间分为两部分，如果privot的位置恰好是k的话，直接返回</span></div><div class="line"><span class="comment">    否则如果pivot &gt; k，说明第k大的数在pivot左边，反之在右边，继续划分即可。</span></div><div class="line"><span class="comment">    如果区间只有一个了，说明找到了。</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> s, <span class="keyword">int</span> e, <span class="keyword">int</span> k)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (s == e &amp;&amp; s + <span class="number">1</span> == k) &#123;</div><div class="line">        <span class="keyword">return</span> arr[s];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">int</span> pivot = arr[e];</div><div class="line">    <span class="keyword">int</span> i = s;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = s; j &lt;e; j++) &#123;</div><div class="line">        <span class="keyword">if</span> (arr[j] &lt; pivot) &#123;</div><div class="line">            <span class="keyword">int</span> temp = arr[i];</div><div class="line">            arr[i++] = arr[j];</div><div class="line">            arr[j] = temp;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    arr[e] = arr[i];</div><div class="line">    arr[i] = pivot;</div><div class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> == k) &#123;</div><div class="line">        <span class="keyword">return</span> arr[i];</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (i + <span class="number">1</span> &gt; k) &#123;</div><div class="line">        <span class="keyword">return</span> find(arr, s, i - <span class="number">1</span>, k);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> find(arr, i + <span class="number">1</span>, e, k);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>再把思路往下延伸一下，放在大数据量环境之下。</p>
+<blockquote>
+<p>有1G的文件，文件中每行一个16字节之内的单词，内存只有16M，要求找出其中出现频率最高的n个，要求顺序。</p>
+</blockquote>
+<p>显然不可能将这些数据全部加载进内存。分治算法是解决此类问题的一个可行方案。</p>
+<p>首先我们将1G文件根据字母序或者哈希算法划分到多个桶（小文件）内，注意要将相同的单词划到同一个桶内，统计桶内单词的词频，生成(单词，频率)对，复杂度O(k)。然后根据TopN算法找出词频前N个另行存储，复杂度O(klogn)。为什么要取前n个呢，极端情况下，词频最高的n个集中在一个桶内。</p>
+<p>最后合并结果，合并的过程可以使用归并排序。</p>
+<hr>
+<p>大佬们见笑了，如有谬误，请在评论区指正，感谢。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/tags/面试题/" rel="tag"># 面试题</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/24/阿里云OSS上手/" rel="next" title="阿里云OSS快速上手">
+                <i class="fa fa-chevron-left"></i> 阿里云OSS快速上手
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zODMzNy8xNDg2NQ=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/img/head.jpg"
+               alt="Junqson" />
+          <p class="site-author-name" itemprop="name">Junqson</p>
+           
+              <p class="site-description motion-element" itemprop="description">三山烟雨一晴松</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jqs1970291214" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://weibo.com/u/6341810178" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      微博
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://ljmx.top" title="ljmx" target="_blank">ljmx</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.stalary.com" title="stalary" target="_blank">stalary</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Junqson</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
